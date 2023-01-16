@@ -17,12 +17,16 @@ public class UsersController : ControllerBase
     
     [HttpPost]
     [Route("AddUser")]
-    public IActionResult AddUser(User user)
+    public IActionResult AddUser(string login, string password)
     {
-        if (_dbContext.Users.FirstOrDefault(x => x.Login == user.Login) != null)
+        if (_dbContext.Users.FirstOrDefault(x => x.Login == login) != null)
             return Conflict();
-
-        user.Password = PasswordHasher.HashPassword(user.Password);
+        
+        User user = new User
+        {
+            Login = login,
+            Password = PasswordHasher.HashPassword(password)
+        };
         _dbContext.Users.Add(user);
         _dbContext.SaveChanges();
         return Ok();

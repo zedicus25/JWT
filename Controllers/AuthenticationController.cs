@@ -21,17 +21,17 @@ public class AuthenticationController : ControllerBase
     
     [HttpPost]
     [Route("login")]
-    public IActionResult Login([FromBody] User loginingUser)
+    public IActionResult Login(string login,string password)
     {
-        if (loginingUser == null)
+        if (login.Equals(String.Empty) || password.Equals(String.Empty))
             return BadRequest();
 
-        var user = _dbContext.Users.FirstOrDefault(x => x.Login == loginingUser.Login);
+        var user = _dbContext.Users.FirstOrDefault(x => x.Login == login);
         
         if(user == null)
             return Unauthorized();
 
-        if (PasswordHasher.VerifyHashedPassword(user.Password, loginingUser.Password))
+        if (PasswordHasher.VerifyHashedPassword(user.Password, password))
         {
             var secretKey =
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["JWT:Secret"]));
