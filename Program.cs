@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using JWT.Cache;
 using JWT.Data;
 using ConfigurationManager = JWT.ConfigurationManager;
 var builder = WebApplication.CreateBuilder(args);
@@ -37,7 +38,7 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 builder.Services.AddDbContext<SmartphonesDataBaseContext>();
-
+builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddAuthentication(opt => 
 {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
