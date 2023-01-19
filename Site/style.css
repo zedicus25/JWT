@@ -1,0 +1,12 @@
+.flexBox{
+    margin: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    
+}
+.horizontal{
+    flex-direction: column;
+}
+.margin-10{
+    margin: 10px;
+}
