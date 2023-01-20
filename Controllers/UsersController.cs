@@ -14,14 +14,14 @@ public class UsersController : ControllerBase
     {
         _dbContext = context;
     }
-    
+
     [HttpPost]
     [Route("AddUser")]
     public IActionResult AddUser(string login, string password)
     {
         if (_dbContext.Users.FirstOrDefault(x => x.Login == login) != null)
             return Conflict();
-        
+
         User user = new User
         {
             Login = login,

@@ -18,7 +18,7 @@ public class AuthenticationController : ControllerBase
     {
         _dbContext = context;
     }
-    
+
     [HttpPost]
     [Route("login")]
     public IActionResult Login(User loginingUser)
@@ -27,8 +27,8 @@ public class AuthenticationController : ControllerBase
             return BadRequest();
 
         var user = _dbContext.Users.FirstOrDefault(x => x.Login == loginingUser.Login);
-        
-        if(user == null)
+
+        if (user == null)
             return Unauthorized();
 
         if (PasswordHasher.VerifyHashedPassword(user.Password, loginingUser.Password))
@@ -45,7 +45,7 @@ public class AuthenticationController : ControllerBase
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(jwtOptions);
             return Ok(new JwtTokenResponse() { Token = tokenStr });
         }
-        
+
         return Unauthorized();
     }
 }

@@ -13,7 +13,7 @@ public class ProductsController : ControllerBase
     private readonly SmartphonesDataBaseContext _dbContext;
     private readonly ICacheService _cacheService;
 
-    public ProductsController(SmartphonesDataBaseContext context,ICacheService cacheService)
+    public ProductsController(SmartphonesDataBaseContext context, ICacheService cacheService)
     {
         _dbContext = context;
         _cacheService = cacheService;
