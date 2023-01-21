@@ -13,12 +13,24 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div>
-        <form class="flexBox horizontal">
-            <input id="loginInput" class="margin-10" type="text" placeholder="Login">
-            <input id="passwordInput" class="margin-10" type="password" placeholder="Password">
-            <input id="loginBtn" class="margin-10" type="button" placeholder="Log in">
+    <div id="signInForm" class="visible">
+        <form class="flexBox flexBox-horizontal align-center">
+            <h1 style="text-align: center">LOGO</h1>
+            <input id="signInLoginInput" class="margin-10 form-control" type="text" placeholder="Login">
+            <input id="signInPasswordInput" class="margin-10 form-control" type="password" placeholder="Password">
+            <input id="loginBtn" class="margin-10 btn btn-primary" type="button" value="Sign in" >
+            <input id="goToSignUpBtn" class="btn btn-link" type="button" value="Sign Up">
         </form>
     </div>
+<div id="signUpForm" class="unVisible">
+    <form class="flexBox flexBox-horizontal align-center">
+        <h1 style="text-align: center">LOGO</h1>
+        <input id="loginInput" class="margin-10 form-control" type="text" placeholder="Login">
+        <input id="passwordInput" class="margin-10 form-control" type="password" placeholder="Password">
+        <input id="passwordInputAgain" class="margin-10 form-control" type="password" placeholder="Repeat password">
+        <input id="signUpBtn" class="margin-10 btn btn-primary" type="button" value="Sign up">
+        <input id="goToSignInBtn" class="btn btn-link" type="button" value="Sign In">
+    </form>
+</div>
 </body>
-</html>
+</html> 

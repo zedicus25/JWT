@@ -30,6 +30,7 @@ public class ProductsController : ControllerBase
             if (smartphonesSql.Count > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
+                smartphones = smartphonesSql;
             }
         }
 
