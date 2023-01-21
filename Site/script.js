@@ -1,9 +1,13 @@
 function load() {
     document.getElementById('loginBtn').addEventListener('click', () =>{
+        let login = document.getElementById('signInLoginInput').value;
+        let password = document.getElementById('signInPasswordInput').value;
+        if(login === "" || password === "")
+            return;
         let user = {
             Id: 0,
-            Login: document.getElementById('signInLoginInput').value,
-            Password: document.getElementById('signInPasswordInput').value,
+            Login: login,
+            Password: password,
         };
         
         $.ajax({
@@ -40,15 +44,16 @@ function load() {
         document.getElementById('signUpForm').setAttribute('class', 'unVisible');
     });
     document.getElementById('signUpBtn').addEventListener('click', () => {
+        let login = document.getElementById('passwordInput').value;
         let pas = document.getElementById('passwordInput').value;
         let pasAgain = document.getElementById('passwordInputAgain').value;
         
-        if(pas !== pasAgain)
+        if(pas !== pasAgain || login === "" || pas === "")
             return;
         
         let user = {
             id: 0,
-            login: document.getElementById('loginInput').value,
+            login: login,
             password: pas
         };
         try {
