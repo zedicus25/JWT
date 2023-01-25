@@ -1,21 +1,20 @@
+using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
 using JWT.Cache;
-using JWT.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace JWT.Controllers;
 [ApiController, Authorize]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
-    private readonly SmartphonesDataBaseContext _dbContext;
+    private readonly IUnitOfWorks _unitOfWorks;
     private readonly ICacheService _cacheService;
 
-    public CategoryController(SmartphonesDataBaseContext context, ICacheService cacheService)
+    public CategoryController(IUnitOfWorks unitOfWorks, ICacheService cacheService)
     {
-        _dbContext = context;
+        _unitOfWorks = unitOfWorks;
         _cacheService = cacheService;
     }
 
@@ -26,20 +25,18 @@ public class CategoryController : ControllerBase
         List<Category> categories = _cacheService.GetData<List<Category>>("Category");
         if (categories == null)
         {
-            var categoriesSql = await _dbContext.Categories.ToListAsync();
-            if (categoriesSql.Count > 0)
+            var categoriesSql = await _unitOfWorks.CategoryRepository.GetAll();
+            if (categoriesSql.Count() > 0)
             {
                 _cacheService.SetData("Category", categoriesSql, DateTimeOffset.Now.AddDays(1));
+                categories = categoriesSql.ToList();
             }
         }
-
         return categories;
     }
-    
+
     [HttpGet]
     [Route("productsCountInCategory")]
-    public async Task<ActionResult<int>> GetCountInCategory(int categoryId)
-    {
-        return _dbContext.Smartphones.Where(x => x.CategoryId == categoryId).ToList().Count;
-    }
+    public async Task<ActionResult<int>> GetCountInCategory(int categoryId) =>  await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
+
 }

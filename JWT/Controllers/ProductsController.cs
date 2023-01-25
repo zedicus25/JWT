@@ -1,21 +1,20 @@
 using JWT.Cache;
-using JWT.Data;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Domain.Interfaces.UnitOfWorks;
 
 namespace JWT.Controllers;
 [ApiController, Authorize]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
-    private readonly SmartphonesDataBaseContext _dbContext;
+    private readonly IUnitOfWorks _unitOfWorks;
     private readonly ICacheService _cacheService;
 
-    public ProductsController(SmartphonesDataBaseContext context, ICacheService cacheService)
+    public ProductsController(IUnitOfWorks unitOfWorks, ICacheService cacheService)
     {
-        _dbContext = context;
+        _unitOfWorks = unitOfWorks;
         _cacheService = cacheService;
     }
 
@@ -26,11 +25,11 @@ public class ProductsController : ControllerBase
         List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
         if (smartphones == null)
         {
-            var smartphonesSql = await _dbContext.Smartphones.ToListAsync();
-            if (smartphonesSql.Count > 0)
+            var smartphonesSql = await _unitOfWorks.SmartphoneRepository.GetAll();
+            if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
-                smartphones = smartphonesSql;
+                smartphones = smartphonesSql.ToList();
             }
         }
 

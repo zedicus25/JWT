@@ -3,8 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using JWT.Data;
 using Domain.Models;
+using Domain.Interfaces.UnitOfWorks;
 
 namespace JWT.Controllers;
 
@@ -12,26 +12,22 @@ namespace JWT.Controllers;
 [Route("api/[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly SmartphonesDataBaseContext _dbContext;
+    private readonly IUnitOfWorks _unitOfWorks;
 
-    public AuthenticationController(SmartphonesDataBaseContext context)
+    public AuthenticationController(IUnitOfWorks unitOfWorks)
     {
-        _dbContext = context;
+        _unitOfWorks = unitOfWorks;
     }
 
     [HttpPost]
     [Route("login")]
-    public IActionResult Login(User loginingUser)
+    public  IActionResult Login(User loginingUser)
     {
         if (loginingUser.Login.Equals(String.Empty) || loginingUser.Password.Equals(String.Empty))
             return BadRequest();
 
-        var user = _dbContext.Users.FirstOrDefault(x => x.Login == loginingUser.Login);
 
-        if (user == null)
-            return Unauthorized();
-
-        if (PasswordHasher.VerifyHashedPassword(user.Password, loginingUser.Password))
+        if (_unitOfWorks.UserRepository.CheckPassword(loginingUser))
         {
             var secretKey =
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ConfigurationManager.AppSettings["JWT:Secret"]));

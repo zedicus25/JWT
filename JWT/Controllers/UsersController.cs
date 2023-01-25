@@ -1,6 +1,6 @@
-using JWT.Data;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using Domain.Interfaces.UnitOfWorks;
 
 namespace JWT.Controllers;
 
@@ -8,28 +8,26 @@ namespace JWT.Controllers;
 [Route("api/[controller]")]
 public class UsersController : ControllerBase
 {
-    private readonly SmartphonesDataBaseContext _dbContext;
+    private readonly IUnitOfWorks _unitOfWorks;
 
-    public UsersController(SmartphonesDataBaseContext context)
+    public UsersController(IUnitOfWorks unitOfWorks)
     {
-        _dbContext = context;
+        _unitOfWorks = unitOfWorks;
     }
 
     [HttpPost]
     [Route("AddUser")]
     public IActionResult AddUser(User newUser)
     {
-        var olduser = _dbContext.Users.FirstOrDefault(x => x.Login == newUser.Login);
+        var olduser = _unitOfWorks.UserRepository.GetAll().Result.FirstOrDefault(x => x.Login == newUser.Login);
         if (olduser != null)
             return Conflict();
 
-        User user = new User
-        {
-            Login = newUser.Login,
-            Password = PasswordHasher.HashPassword(newUser.Password)
-        };
-        _dbContext.Users.Add(user);
-        _dbContext.SaveChanges();
-        return Ok();
+        _unitOfWorks.UserRepository.Add(newUser);
+        if(_unitOfWorks.Commit() > 0)
+            return Ok();
+
+        return BadRequest();
+
     }
 }

@@ -3,8 +3,14 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using JWT.Cache;
-using JWT.Data;
 using ConfigurationManager = JWT.ConfigurationManager;
+using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
+using DataAcessEF.Repositories;
+using Domain.Interfaces.UnitOfWorks;
+using DataAcessEF.UnitOfWorks;
+using DataAcessEF.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -37,7 +43,15 @@ builder.Services.AddSwaggerGen(options => {
     });
 });
 
-builder.Services.AddDbContext<SmartphonesDataBaseContext>();
+builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepo<>));
+builder.Services.AddTransient<ISmartphoneRepository, SmartphoneRepo>();
+builder.Services.AddTransient<ICategoryRepository, CategoryRepo>();
+builder.Services.AddTransient<IUserRepository, UserRepo>();
+builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
+builder.Services.AddDbContext<SmartphonesDbContext>(options =>
+options.UseSqlServer(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    b => b.MigrationsAssembly(typeof(SmartphonesDbContext).Assembly.FullName)));
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddAuthentication(opt => 
 {

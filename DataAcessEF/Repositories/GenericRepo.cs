@@ -13,21 +13,21 @@ namespace DataAcessEF.Repositories
             this._dbContext = dbContext;
         }
 
-        public void Add(T item) => _dbContext.Set<T>().Add(item);
+        public virtual void Add(T item) => _dbContext.Set<T>().Add(item);
        
 
-        public void Delete(T item)
+        public virtual void Delete(T item)
         {
             var itemForDelete = _dbContext.Set<T>().Find(item);
             _dbContext.Set<T>().Remove(itemForDelete);
         }
 
-        public async Task<IEnumerable<T>> GetAll() => await  _dbContext.Set<T>().ToListAsync();
+        public virtual async Task<IEnumerable<T>> GetAll() => await  _dbContext.Set<T>().ToListAsync();
 
 
-        public async Task<T> GetById(int id) => await _dbContext.Set<T>().FindAsync(id);
+        public virtual async Task<T> GetById(int id) => await _dbContext.Set<T>().FindAsync(id);
 
-        public void Update(T item)
+        public virtual void Update(T item)
         {
             throw new NotImplementedException();
         }
