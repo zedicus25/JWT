@@ -1,6 +1,6 @@
+using Domain.Models;
 using JWT.Cache;
 using JWT.Data;
-using JWT.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

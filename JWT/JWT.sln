@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32929.385
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWT", "JWT.csproj", "{BF5B1DCD-05DE-4358-B715-BEDDBAD74545}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "..\Domain\Domain.csproj", "{31A722C8-1590-4AA9-9336-E79E81819435}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAcessEF", "..\DataAcessEF\DataAcessEF.csproj", "{4EEC6E4B-2300-40D0-BA36-99A4266E277A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BF5B1DCD-05DE-4358-B715-BEDDBAD74545}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF5B1DCD-05DE-4358-B715-BEDDBAD74545}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF5B1DCD-05DE-4358-B715-BEDDBAD74545}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF5B1DCD-05DE-4358-B715-BEDDBAD74545}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31A722C8-1590-4AA9-9336-E79E81819435}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31A722C8-1590-4AA9-9336-E79E81819435}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31A722C8-1590-4AA9-9336-E79E81819435}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31A722C8-1590-4AA9-9336-E79E81819435}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EEC6E4B-2300-40D0-BA36-99A4266E277A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EEC6E4B-2300-40D0-BA36-99A4266E277A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EEC6E4B-2300-40D0-BA36-99A4266E277A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EEC6E4B-2300-40D0-BA36-99A4266E277A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C73B863-2F7E-4B6D-9712-0056F36F2F7B}
+	EndGlobalSection
+EndGlobal

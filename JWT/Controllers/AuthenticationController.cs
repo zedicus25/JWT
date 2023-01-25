@@ -1,10 +1,10 @@
-using JWT.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using JWT.Data;
+using Domain.Models;
 
 namespace JWT.Controllers;
 

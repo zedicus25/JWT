@@ -1,5 +1,5 @@
 using JWT.Data;
-using JWT.Models;
+using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.Controllers;
