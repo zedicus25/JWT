@@ -14,6 +14,12 @@
 
         public int? CategoryId { get; set; }
 
+        public int? Quantity {get; set;}
+        public int? Sold {get; set;}
+
+        public int? StatusId { get; set; }
+
         public virtual Category? Category { get; set; }
+        public virtual Status? Status { get; set; }
     }
 }
