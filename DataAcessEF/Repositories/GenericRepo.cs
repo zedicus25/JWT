@@ -16,9 +16,9 @@ namespace DataAcessEF.Repositories
         public virtual void Add(T item) => _dbContext.Set<T>().Add(item);
        
 
-        public virtual void Delete(T item)
+        public virtual void Delete(int id)
         {
-            var itemForDelete = _dbContext.Set<T>().Find(item);
+            var itemForDelete = _dbContext.Set<T>().Find(id);
             _dbContext.Set<T>().Remove(itemForDelete);
         }
 

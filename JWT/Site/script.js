@@ -28,7 +28,7 @@ function load() {
             success: function(data) {
                 if(data.token != null){
                     sessionStorage.setItem('AccessToken', data.token);
-                    GoToProductsPage();
+                    GoToAdminPanel();
                 }
                 
             }
@@ -118,6 +118,27 @@ function GoToProductsPage() {
             {
                 if(data != null)
                     open('./ProductsPage.html');
+            }
+        });
+    }
+    catch (ex) { }
+}
+
+function GoToAdminPanel() {
+    try {
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: "https://localhost:7167/api/Products/productsList",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
+            },
+            success: function (data)
+            {
+                if(data != null)
+                    open('./adminPage.html');
             }
         });
     }

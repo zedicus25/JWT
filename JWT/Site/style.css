@@ -6,6 +6,10 @@
     transform: translate(-50%, -50%);
 }
 
+.adminPanelImg{
+    width: 100px;
+    height: 100px;
+}
 
 .flexBox{
     margin: 10px;
@@ -25,4 +29,8 @@
 }
 .unVisible{
     visibility: hidden;
+}
+
+.contentCenterAlign{
+    text-align: center;
 }

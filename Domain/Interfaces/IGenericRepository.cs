@@ -5,7 +5,7 @@
        Task<IEnumerable<T>> GetAll();
         Task<T> GetById(int id);
         void Add(T item);
-        void Delete(T item);
+        void Delete(int id);
         void Update(T item);    
     }
 }

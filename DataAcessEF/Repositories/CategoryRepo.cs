@@ -11,7 +11,7 @@ namespace DataAcessEF.Repositories
         {
         }
 
-        public Task<int> GetCountInCategory(int id) => _dbContext.Categories.Where(x => x.Id == _dbContext.Categories.FindAsync(id).Result.Id).CountAsync();
+        public Task<int> GetCountInCategory(int id) => _dbContext.Smartphones.Where(x => x.CategoryId == id).CountAsync();
 
     }
 }
