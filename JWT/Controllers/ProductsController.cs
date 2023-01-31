@@ -73,7 +73,7 @@ public class ProductsController : ControllerBase
         return NotFound();
     }
 
-    [HttpDelete]
+    [HttpGet]
     [Route("getProduct")]
     public ActionResult<Smartphone> GetProduct(int productId)
     {
@@ -83,13 +83,31 @@ public class ProductsController : ControllerBase
             var smart = smartphones.FirstOrDefault(x => x.Id == productId);
             if (smart != null)
                 return smart;
-            return NotFound();
         }
         var smart1 = _unitOfWorks.SmartphoneRepository.GetSmartphoneById(productId);
         if (smart1 != null)
             return smart1;
         return NotFound();
 
+    }
+
+    [HttpPost]
+    [Route("addProduct")]
+    public IActionResult AddProduct(Smartphone smartphone)
+    {
+        _unitOfWorks.SmartphoneRepository.Add(smartphone);
+        if (_unitOfWorks.Commit() > 0)
+            return Ok();
+        return BadRequest();
+    }
+    [HttpPut]
+    [Route("updateProduct")]
+    public IActionResult UpdateProduct(Smartphone smartphone)
+    {
+        _unitOfWorks.SmartphoneRepository.Update(smartphone);
+        if (_unitOfWorks.Commit() > 0)
+            return Ok();
+        return BadRequest();
     }
 
 }

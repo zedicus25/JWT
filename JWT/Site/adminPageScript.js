@@ -1,5 +1,9 @@
 function load(){
 LoadCategories();
+$("#addBtn").click(() => {
+    addProduct();
+    location.reload();
+});
 }
 
 function LoadCategories() {
@@ -112,7 +116,7 @@ function createHeadersForProductsTable(){
 function createControlButtons(parentNode, productId) {
     let td = document.createElement('td');
     let div = document.createElement("div");
-    div.setAttribute("class",'flexBox flexBox-horizontal');
+    div.setAttribute("class",'flexBox flexBox-vertical');
     let deleteBtn = document.createElement("input");
     deleteBtn.setAttribute('type','button');
     deleteBtn.setAttribute('class','btn btn-danger');
@@ -128,18 +132,42 @@ function createControlButtons(parentNode, productId) {
                 'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
             },  
             success: function (response) {
-                parentNode.remove();
-                alert("Deleted");
-                return;
             }
         });
+        alert("Deleted");
+        location.reload();
     });
     let updateBtn = document.createElement("input");
     updateBtn.setAttribute('type','button');
     updateBtn.setAttribute('class','btn btn-warning');
     updateBtn.setAttribute('value','Update');
     updateBtn.addEventListener('click', () => {
-        
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: `https://localhost:7167/api/Products/getProduct?productId=${productId}`,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            headers: {
+                'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
+            },  
+            success: function (response) {
+                $("#updateInput").attr("class", "flexBox flexBox-vertical visible");
+                $("#nameUpdateInput").val(response.name);
+                $("#idUpdateInput").val(response.id);
+                $("#modelUpdateInput").val(response.model);
+                $("#categoryIdUpdateInput").val(response.categoryId);
+                $("#photoUpdateInput").val(response.photo);
+                $("#priceUpdateInput").val(response.price);
+                $("#quantityUpdateInput").val(response.quantity);
+                $("#soldUpdateInput").val(response.sold);
+                $("#visibleUpdateInput").checked = response.statusId == 1 ? true : false;
+                $("#saveBtn").click(() =>{
+                    updateProduct();
+                    location.reload();
+                });
+            }
+        });
     });
     div.append(deleteBtn);
     div.append(updateBtn);
@@ -171,5 +199,80 @@ function createTdWithCheckBox(checked, productId){
     return td;
 }
 
+function updateProduct(){
+    let product ={
+        category: null,
+        categoryId: $("#categoryIdUpdateInput").val(),
+        id: $('#idUpdateInput').val(),
+        model: $("#modelUpdateInput").val(),
+        name: $("#nameUpdateInput").val(),
+        photo: $("#photoUpdateInput").val(),
+        price: $("#priceUpdateInput").val(),
+        quantity: $("#quantityUpdateInput").val(),
+        sold: $("#soldUpdateInput").val(),
+        status: null,
+        statusId: $("#visibleUpdateInput").checked == true ? 2 : 1
+    };
+    $.ajax({
+        async: true,
+        type: "PUT",
+        url: `https://localhost:7167/api/Products/updateProduct`,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(product),
+        headers: {
+            'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
+        },  
+        success: function (response) {
+        }
+    });
+    alert("Updated!");
+    $("#updateInput").attr("class", "flexBox flexBox-vertical unVisible");
+    $("#nameUpdateInput").val("");
+    $("#idUpdateInput").val("");
+    $("#modelUpdateInput").val("");
+    $("#categoryIdUpdateInput").val("");
+    $("#photoUpdateInput").val("");
+    $("#priceUpdateInput").val("");
+    $("#quantityUpdateInput").val("");
+    $("#soldUpdateInput").val("");
+}
 
+function addProduct(){
+    let product ={
+        category: null,
+        categoryId: $("#categoryIdAddInput").val(),
+        id: 0,
+        model: $("#modelAddInput").val(),
+        name: $("#nameAddInput").val(),
+        photo: $("#photoAddInput").val(),
+        price: $("#priceAddInput").val(),
+        quantity: $("#quantityAddInput").val(),
+        sold: $("#soldAddInput").val(),
+        status: null,
+        statusId: $("#visibleAddInput").checked == true ? 2 : 1
+    };
+    $.ajax({
+        async: true,
+        type: "POST",
+        url: `https://localhost:7167/api/Products/addProduct`,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        data: JSON.stringify(product),
+        headers: {
+            'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
+        },  
+        success: function (response) {
+        }
+    });
+    alert("Added!");
+    $("#nameAddInput").val("");
+    $("#modelAddInput").val("");
+    $("#categoryIdAddInput").val("");
+    $("#photoAddInput").val("");
+    $("#priceAddInput").val("");
+    $("#quantityAddInput").val("");
+    $("#soldAddInput").val("");
+    $("#visibleAddInput").checked = true;
+}
 document.addEventListener("DOMContentLoaded", load);

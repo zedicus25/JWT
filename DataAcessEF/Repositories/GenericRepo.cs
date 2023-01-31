@@ -29,7 +29,7 @@ namespace DataAcessEF.Repositories
 
         public virtual void Update(T item)
         {
-            throw new NotImplementedException();
+            _dbContext.Set<T>().Update(item);
         }
     }
 }

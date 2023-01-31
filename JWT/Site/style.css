@@ -6,6 +6,10 @@
     transform: translate(-50%, -50%);
 }
 
+#inputForm{
+    width: 340px;
+}
+
 .adminPanelImg{
     width: 100px;
     height: 100px;
@@ -17,8 +21,11 @@
     flex-wrap: wrap;
     
 }
-.flexBox-horizontal{
+.flexBox-vertical{
     flex-direction: column;
+}
+.flexBox-horizontal{
+    flex-direction: row;
 }
 .margin-10{
     margin: 10px;

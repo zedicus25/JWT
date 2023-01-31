@@ -36,7 +36,7 @@ public class AuthenticationController : ControllerBase
                 issuer: ConfigurationManager.AppSettings["JWT:ValidIssuer"],
                 audience: ConfigurationManager.AppSettings["JWT:ValidAudience"],
                 claims: new List<Claim>(),
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(120),
                 signingCredentials: signinCredentials);
             var tokenStr = new JwtSecurityTokenHandler().WriteToken(jwtOptions);
             return Ok(new JwtTokenResponse() { Token = tokenStr });

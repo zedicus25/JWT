@@ -26,8 +26,5 @@ namespace DataAcessEF.Repositories
                 _dbContext.Entry(smartphone).State = EntityState.Modified;
             }
         }
-
-
-            
     }
 }

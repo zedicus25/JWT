@@ -40,8 +40,52 @@
             <td>Visibility</td>
         </tr>
         </tbody>
-       
-        
     </table>
+
+
+    <div class="flexBox flexBox-horizontal">
+        <div id="addInput" class="flexBox flexBox-vertical visible">
+            <h3 class="margin-10">Add product</h3>
+            <form id="inputAddForm" class="flexBox flexBox-vertical">
+                <input class="form-control margin-10" id="nameAddInput" type="text" placeholder="Name" minlength="5">
+                <input class="form-control margin-10" id="modelAddInput" type="text" placeholder="Model" minlength="5">
+                <input class="form-control margin-10" id="categoryIdAddInput" type="number" placeholder="Category Id" min="1">
+                <input class="form-control margin-10" id="photoAddInput" type="text" placeholder="Photo link" minlength="25">
+                <input class="form-control margin-10" id="priceAddInput" type="number" placeholder="Price" min="1">
+                <input class="form-control margin-10" id="quantityAddInput" type="number" placeholder="Quantity" min="1">
+                <input class="form-control margin-10" id="soldAddInput" type="number" placeholder="Sold" min="0">
+                <div class="form-check margin-10">
+                    <input class="form-check-input" type="checkbox" checked id="visibleAddInput">
+                    <label class="form-check-label" for="visibleAddInput">
+                      Visible
+                    </label>
+                </div>
+                <input class="btn btn-success margin-10" id="addBtn" type="button" value="Add"> 
+            </form>
+        </div>
+
+        <div id="updateInput" class="flexBox flexBox-vertical unVisible">
+            <h3 class="margin-10">Update product</h3>
+            <form id="inputUpdateForm" class="flexBox flexBox-vertical">
+                <input class="form-control margin-10" id="idUpdateInput" disabled readonly type="text" placeholder="Name" minlength="5">
+                <input class="form-control margin-10" id="nameUpdateInput" type="text" placeholder="Name" minlength="5">
+                <input class="form-control margin-10" id="modelUpdateInput" type="text" placeholder="Model" minlength="5">
+                <input class="form-control margin-10" id="categoryIdUpdateInput" type="number" placeholder="Category Id" min="1">
+                <input class="form-control margin-10" id="photoUpdateInput" type="text" placeholder="Photo link" minlength="25">
+                <input class="form-control margin-10" id="priceUpdateInput" type="number" placeholder="Price" min="1">
+                <input class="form-control margin-10" id="quantityUpdateInput" type="number" placeholder="Quantity" min="1">
+                <input class="form-control margin-10" id="soldUpdateInput" type="number" placeholder="Sold" min="0">
+                <div class="form-check margin-10">
+                    <input class="form-check-input" type="checkbox" checked id="visibleUpdateInput">
+                    <label class="form-check-label" for="visibleUpdateInput">
+                      Visible
+                    </label>
+                </div>
+                <input class="btn btn-success margin-10" id="saveBtn" type="button" value="Save"> 
+            </form>
+        </div>
+    </div>
+   
+    
 </body>
 </html>
