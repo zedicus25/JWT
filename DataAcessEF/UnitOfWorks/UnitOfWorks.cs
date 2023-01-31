@@ -7,7 +7,6 @@ namespace DataAcessEF.UnitOfWorks
 {
     public class UnitOfWorks : IUnitOfWorks
     {
-        public IUserRepository UserRepository {get;}
 
         public ICategoryRepository CategoryRepository { get; }
 
@@ -20,7 +19,6 @@ namespace DataAcessEF.UnitOfWorks
             _dbContext = context;
             CategoryRepository = new CategoryRepo(_dbContext);
             SmartphoneRepository = new SmartphoneRepo(_dbContext);
-            UserRepository = new UserRepo(_dbContext);
         }
 
         public int Commit() => _dbContext.SaveChanges();

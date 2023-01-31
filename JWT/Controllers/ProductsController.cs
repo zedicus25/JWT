@@ -3,8 +3,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Interfaces.UnitOfWorks;
-using System.Collections;
-using DataAcessEF.UnitOfWorks;
+using JWT.Roles;
 
 namespace JWT.Controllers;
 [ApiController, Authorize]
@@ -44,6 +43,7 @@ public class ProductsController : ControllerBase
         await _unitOfWorks.SmartphoneRepository.GetByCategoryId(categoryId);
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("setStatus")]
     public ActionResult SetStatus(int productId, int statusId)
     {
@@ -54,6 +54,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("deleteProduct")]
     public ActionResult DeleteProduct(int productId)
     {
@@ -92,6 +93,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("addProduct")]
     public IActionResult AddProduct(Smartphone smartphone)
     {
@@ -101,6 +103,7 @@ public class ProductsController : ControllerBase
         return BadRequest();
     }
     [HttpPut]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("updateProduct")]
     public IActionResult UpdateProduct(Smartphone smartphone)
     {
