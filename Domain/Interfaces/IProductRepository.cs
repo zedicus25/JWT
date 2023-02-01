@@ -10,5 +10,6 @@ namespace Domain.Interfaces
         void SetStatus(int smartphoneId, int statusId);
 
         Product GetProductById(int smartphoneId);
+        IEnumerable<Product> GetProductInSubCategories(int[] categotiesId, int categoryId);
     }
 }

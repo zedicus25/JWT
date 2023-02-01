@@ -40,18 +40,24 @@ public class ProductsController : ControllerBase
         catch(Exception ex)
         {
         }
-        return _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3).ToList();
+        return _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 && x.StatusId !=2).ToList();
     }
 
     [HttpGet]
     [Route("getProductsInCategory")]
-    public async Task<ActionResult<IEnumerable<Product>>> GetByCategoryId(int categoryId) =>
+    public async Task<ActionResult<IEnumerable<Product>>> GetByCategoryId([FromQuery(Name = "categoryId")] int categoryId) =>
         await _unitOfWorks.ProductRepository.GetByCategoryId(categoryId);
+
+    [HttpGet]
+    [Route("getProductsInSubCategories")]
+    public  ActionResult<IEnumerable<Product>> GetBySubCategories([FromQuery(Name = "categoriesId")] int[] categoriesId, 
+        [FromQuery(Name = "categoryId")] int categoryId) =>
+        _unitOfWorks.ProductRepository.GetProductInSubCategories(categoriesId, categoryId).ToList();
 
     [HttpPost]
     [Authorize(Roles = UserRoles.Manager)]
     [Route("setStatus")]
-    public ActionResult SetStatus(int productId, int statusId)
+    public ActionResult SetStatus([FromQuery(Name = "productId")] int productId, [FromQuery(Name = "statusId")] int statusId)
     {
         _unitOfWorks.ProductRepository.SetStatus(productId, statusId);
         if (_unitOfWorks.Commit() > 0)
@@ -62,13 +68,13 @@ public class ProductsController : ControllerBase
     [HttpDelete]
     [Authorize(Roles = UserRoles.Manager)]
     [Route("deleteProduct")]
-    public ActionResult DeleteProduct(int productId)
+    public ActionResult DeleteProduct([FromQuery(Name = "productId")] int productId)
     {
         _unitOfWorks.ProductRepository.SetStatus(productId, 3);
         if (_unitOfWorks.Commit() > 0)
         {
             List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
-            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3);
+            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 && x.StatusId != 2);
             if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
@@ -82,7 +88,7 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("getProduct")]
-    public ActionResult<Product> GetProduct(int productId)
+    public ActionResult<Product> GetProduct([FromQuery(Name = "productId")] int productId)
     {
         List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
         if (smartphones.Count() > 0)
@@ -101,7 +107,7 @@ public class ProductsController : ControllerBase
     [HttpPost]
     [Authorize(Roles = UserRoles.Manager)]
     [Route("addProduct")]
-    public IActionResult AddProduct(Product smartphone)
+    public IActionResult AddProduct([FromBody] Product smartphone)
     {
         _unitOfWorks.ProductRepository.Add(smartphone);
         if (_unitOfWorks.Commit() > 0)
@@ -111,7 +117,7 @@ public class ProductsController : ControllerBase
     [HttpPut]
     [Authorize(Roles = UserRoles.Manager)]
     [Route("updateProduct")]
-    public IActionResult UpdateProduct(Product smartphone)
+    public IActionResult UpdateProduct([FromBody]Product smartphone)
     {
         _unitOfWorks.ProductRepository.Update(smartphone);
         if (_unitOfWorks.Commit() > 0)
@@ -121,9 +127,9 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("findProduct")]
-    public async Task<ActionResult<IEnumerable<Product>>> FindProducts(string productName)
+    public async Task<ActionResult<IEnumerable<Product>>> FindProducts([FromQuery(Name = "productName")]string productName)
     {
-        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()) && x.StatusId != 3);
+        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()) && x.StatusId != 3 && x.StatusId != 2);
         if (smart1 != null)
             return smart1.ToList();
         return NotFound();

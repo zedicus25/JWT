@@ -13,5 +13,7 @@ namespace DataAcessEF.Repositories
 
         public Task<int> GetCountInCategory(int id) => _dbContext.Products.Where(x => x.CategoryId == id && x.StatusId != 3).CountAsync();
 
+        public async Task<IEnumerable<SubCategory>> GetSubCategories() => await _dbContext.SubCategories.ToListAsync();
+
     }
 }

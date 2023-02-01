@@ -22,21 +22,55 @@ public class CategoryController : ControllerBase
     [Route("categoryList")]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
-        List<Category> categories = _cacheService.GetData<List<Category>>("Category");
-        if (categories == null)
+        try
         {
-            var categoriesSql = await _unitOfWorks.CategoryRepository.GetAll();
-            if (categoriesSql.Count() > 0)
+            List<Category> categories = _cacheService.GetData<List<Category>>("Category");
+            if (categories == null)
             {
-                _cacheService.SetData("Category", categoriesSql, DateTimeOffset.Now.AddDays(1));
-                categories = categoriesSql.ToList();
+                var categoriesSql = await _unitOfWorks.CategoryRepository.GetAll();
+                if (categoriesSql.Count() > 0)
+                {
+                    _cacheService.SetData("Category", categoriesSql, DateTimeOffset.Now.AddDays(1));
+                    categories = categoriesSql.ToList();
+                }
             }
+            return categories;
         }
-        return categories;
+        catch (Exception)
+        {
+        }
+        return _unitOfWorks.CategoryRepository.GetAll().Result.ToList();
+
+
+    }
+
+    [HttpGet]
+    [Route("subCategoryList")]
+    public async Task<ActionResult<IEnumerable<SubCategory>>> GetSubCategories()
+    {
+        try
+        {
+            List<SubCategory> categories = _cacheService.GetData<List<SubCategory>>("SubCategory");
+            if (categories == null)
+            {
+                var categoriesSql = await _unitOfWorks.CategoryRepository.GetSubCategories();
+                if (categoriesSql.Count() > 0)
+                {
+                    _cacheService.SetData("SubCategory", categoriesSql, DateTimeOffset.Now.AddDays(1));
+                    categories = categoriesSql.ToList();
+                }
+            }
+            return categories;
+        }
+        catch (Exception)
+        {
+        }
+        return _unitOfWorks.CategoryRepository.GetSubCategories().Result.ToList();
     }
 
     [HttpGet]
     [Route("productsCountInCategory")]
-    public async Task<ActionResult<int>> GetCountInCategory(int categoryId) =>  await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
+    public async Task<ActionResult<int>> GetCountInCategory([FromQuery(Name = "categoryId")] int categoryId) =>  
+        await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
 
 }

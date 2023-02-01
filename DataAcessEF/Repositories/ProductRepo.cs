@@ -15,7 +15,16 @@ namespace DataAcessEF.Repositories
             _dbContext.Products.Where(x => x.CategoryId == id && x.StatusId != 3).ToListAsync();
 
         public Product GetProductById(int smartphoneId) => _dbContext.Products.FirstOrDefault(x => x.Id == smartphoneId);
-     
+
+        public IEnumerable<Product> GetProductInSubCategories(int[] categotiesId, int categoryId)
+        {
+            List<Product> products = new List<Product>();
+            foreach (var id in categotiesId)
+            {
+                products.AddRange(_dbContext.Products.Where(x => x.SubCategoryId == id && x.CategoryId == categoryId));
+            }
+            return products.ToList();
+        }
 
         public void SetStatus(int smartphoneId, int statusId)
         {
