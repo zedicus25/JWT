@@ -127,12 +127,16 @@ public class AuthenticationController : ControllerBase
 
         if (!await _roleManager.RoleExistsAsync(UserRoles.Admin))
             await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+        if(!await _roleManager.RoleExistsAsync(UserRoles.Manager))
+            await _roleManager.CreateAsync(new IdentityRole(UserRoles.Manager));
         if (!await _roleManager.RoleExistsAsync(UserRoles.User))
             await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
 
 
         if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+        if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
+            await _userManager.AddToRoleAsync(user, UserRoles.Manager);
         if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 

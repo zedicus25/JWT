@@ -7,6 +7,7 @@ using JWT.Roles;
 
 namespace JWT.Controllers;
 [ApiController]
+[Authorize]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
@@ -23,18 +24,24 @@ public class ProductsController : ControllerBase
     [Route("productsList")]
     public async Task<ActionResult<IEnumerable<Product>>> Get()
     {
-        List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
-        if (smartphones == null)
+        try
         {
-            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3);
-            if (smartphonesSql.Count() > 0)
+            List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
+            if (smartphones == null)
             {
-                _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
-                smartphones = smartphonesSql.ToList();
+                var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3).ToList();
+                if (smartphonesSql.Count() > 0)
+                {
+                    _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
+                    smartphones = smartphonesSql.ToList();
+                }
             }
+            return smartphones;
         }
-
-        return smartphones;
+        catch(Exception ex)
+        {
+        }
+        return _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3).ToList();
     }
 
     [HttpGet]
@@ -43,7 +50,7 @@ public class ProductsController : ControllerBase
         await _unitOfWorks.ProductRepository.GetByCategoryId(categoryId);
 
     [HttpPost]
-    [Authorize(Roles = UserRoles.Admin)]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("setStatus")]
     public ActionResult SetStatus(int productId, int statusId)
     {
@@ -54,6 +61,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("deleteProduct")]
     public ActionResult DeleteProduct(int productId)
     {
@@ -92,6 +100,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("addProduct")]
     public IActionResult AddProduct(Product smartphone)
     {
@@ -101,6 +110,7 @@ public class ProductsController : ControllerBase
         return BadRequest();
     }
     [HttpPut]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("updateProduct")]
     public IActionResult UpdateProduct(Product smartphone)
     {

@@ -8,11 +8,17 @@ public class CacheService : ICacheService
     IDatabase _db;
     public CacheService()
     {
-        _db = ConnectionHelper.Connection.GetDatabase();
+        try
+        {
+            _db = ConnectionHelper.Connection.GetDatabase();
+        }
+        catch(Exception ex)
+        {
+        }
     }
     public T GetData<T>(string key)
     {
-        var val = _db.StringGet(key);
+        var val = _db?.StringGet(key);
         if (!string.IsNullOrEmpty(val)) {
             return JsonConvert.DeserializeObject<T>(val);
         }
@@ -20,5 +26,9 @@ public class CacheService : ICacheService
     }
 
     public bool SetData<T>(string key, T value, DateTimeOffset dateTimeOffset)
-        => _db.StringSet(key, JsonConvert.SerializeObject(value), dateTimeOffset.DateTime.Subtract(DateTime.Now));
+    {
+        if (_db == null)
+            return false;
+        return _db.StringSet(key, JsonConvert.SerializeObject(value), dateTimeOffset.DateTime.Subtract(DateTime.Now));
+    }
 }

@@ -10,9 +10,12 @@ public class ConnectionHelper
     
     static ConnectionHelper()
     {
-        _lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-        {
-            return ConnectionMultiplexer.Connect(ConfigurationManager.AppSettings["RedisUrl"]);
+        _lazyConnection = new Lazy<ConnectionMultiplexer>(() => {
+            try
+            {
+                return ConnectionMultiplexer.Connect(ConfigurationManager.AppSettings["RedisUrl"]);
+            }
+            catch (Exception ex) { return null; }
         });
     }
 }
