@@ -6,7 +6,7 @@ using Domain.Interfaces.UnitOfWorks;
 using JWT.Roles;
 
 namespace JWT.Controllers;
-[ApiController, Authorize]
+[ApiController]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
@@ -26,7 +26,7 @@ public class ProductsController : ControllerBase
         List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
         if (smartphones == null)
         {
-            var smartphonesSql =  _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.StatusId != 3);
+            var smartphonesSql = _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.StatusId != 3);
             if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
@@ -54,11 +54,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpDelete]
-    [Authorize(Roles = UserRoles.Admin)]
     [Route("deleteProduct")]
     public ActionResult DeleteProduct(int productId)
     {
-        _unitOfWorks.SmartphoneRepository.SetStatus(productId,3);
+        _unitOfWorks.SmartphoneRepository.SetStatus(productId, 3);
         if (_unitOfWorks.Commit() > 0)
         {
             List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
@@ -70,7 +69,7 @@ public class ProductsController : ControllerBase
             }
             return Ok("Ok");
         }
-            
+
         return NotFound();
     }
 
@@ -79,7 +78,7 @@ public class ProductsController : ControllerBase
     public ActionResult<Smartphone> GetProduct(int productId)
     {
         List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
-        if(smartphones.Count() > 0)
+        if (smartphones.Count() > 0)
         {
             var smart = smartphones.FirstOrDefault(x => x.Id == productId);
             if (smart != null)
@@ -93,7 +92,6 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Roles = UserRoles.Admin)]
     [Route("addProduct")]
     public IActionResult AddProduct(Smartphone smartphone)
     {
@@ -103,7 +101,6 @@ public class ProductsController : ControllerBase
         return BadRequest();
     }
     [HttpPut]
-    [Authorize(Roles = UserRoles.Admin)]
     [Route("updateProduct")]
     public IActionResult UpdateProduct(Smartphone smartphone)
     {
@@ -113,4 +110,14 @@ public class ProductsController : ControllerBase
         return BadRequest();
     }
 
+    [HttpGet]
+    [Route("findProduct")]
+    public async Task<ActionResult<IEnumerable<Smartphone>>> FindProducts(string productName)
+    {
+        var smart1 = _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()));
+        if (smart1 != null)
+            return smart1.ToList();
+        return NotFound();
+
+     }
 }

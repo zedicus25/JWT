@@ -30,10 +30,9 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost]
     [Route("login")]
-    public async Task<IActionResult> Login([FromBody] Login model)
+    public async Task<IActionResult> Login([FromBody]Login model)
     {
         var user = await _userManager.FindByNameAsync(model.UserName);
-        var d = _userManager.CheckPasswordAsync(user, model.Password);
         if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
         {
             var userRole = await _userManager.GetRolesAsync(user);
@@ -52,7 +51,7 @@ public class AuthenticationController : ControllerBase
             return Ok(new
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo
+                expiration = token.ValidTo,
             });
         }
         return Unauthorized();
@@ -78,6 +77,36 @@ public class AuthenticationController : ControllerBase
         return Ok("User added!");
     }
 
+    [HttpPost]
+    [Route("regManager")]
+    public async Task<IActionResult> RegManager([FromBody] Register model)
+    {
+        var userEx = await _userManager.FindByNameAsync(model.UserName);
+        if (userEx != null) return StatusCode(StatusCodes.Status500InternalServerError, "User in db already");
+
+        IdentityUser user = new()
+        {
+            UserName = model.UserName,
+            Email = model.Email,
+            SecurityStamp = Guid.NewGuid().ToString()
+        };
+
+        var res = await _userManager.CreateAsync(user, model.Password);
+        if (!res.Succeeded) { return StatusCode(StatusCodes.Status500InternalServerError, "Creation failed!"); }
+
+        if (!await _roleManager.RoleExistsAsync(UserRoles.Manager))
+            await _roleManager.CreateAsync(new IdentityRole(UserRoles.Manager));
+        if (!await _roleManager.RoleExistsAsync(UserRoles.User))
+            await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+
+        if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
+            await _userManager.AddToRoleAsync(user, UserRoles.Manager);
+        if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
+            await _userManager.AddToRoleAsync(user, UserRoles.User);
+
+        return Ok("Manager added!");
+    }
 
     [HttpPost]
     [Route("regAdmin")]

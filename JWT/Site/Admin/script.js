@@ -5,8 +5,7 @@ function load() {
         if(login === "" || password === "")
             return;
         let user = {
-            Id: 0,
-            Login: login,
+            UserName: login,
             Password: password,
         };
         
@@ -26,10 +25,10 @@ function load() {
             },
 
             success: function(data) {
-                if(data.token != null){
-                    sessionStorage.setItem('AccessToken', data.token);
-                    GoToAdminPanel();
-                }
+               if(data.token != null){
+                sessionStorage.setItem('AccessToken', data.token);
+                GoToAdminPanel();
+            }
                 
             }
 
@@ -80,48 +79,6 @@ function load() {
        
         
     });
-}
-
-
-function GoToCategoryPage() {
-    try {
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "https://localhost:7167/api/Products/productsList",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
-            },
-            success: function (data)
-            {
-                if(data != null)
-                    open('./CategoryPage.html');
-            }
-        });
-    }
-    catch (ex) { }
-}
-function GoToProductsPage() {
-    try {
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: "https://localhost:7167/api/Products/productsList",
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            headers: {
-                'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
-            },
-            success: function (data)
-            {
-                if(data != null)
-                    open('./ProductsPage.html');
-            }
-        });
-    }
-    catch (ex) { }
 }
 
 function GoToAdminPanel() {

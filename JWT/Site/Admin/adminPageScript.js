@@ -4,6 +4,9 @@ $("#addBtn").click(() => {
     addProduct();
     location.reload();
 });
+$("#findBtn").click(() => {
+findProducts($("#findInput").val());
+});
 }
 
 function LoadCategories() {
@@ -274,5 +277,45 @@ function addProduct(){
     $("#quantityAddInput").val("");
     $("#soldAddInput").val("");
     $("#visibleAddInput").checked = true;
+}
+
+function findProducts(name){
+    if(name === "")
+        return;
+try {
+                    $.ajax({
+                        async: true,
+                        type: "GET",
+                        url: `https://localhost:7167/api/Products/findProduct?productName=${name}`,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        headers: {
+                            'Authorization': 'Bearer ' +  sessionStorage.getItem("AccessToken")
+                        },  
+                        success: function (products)
+                        {
+                            let table = document.getElementById("productsTable");
+                        table.innerHTML ="";
+                            console.log(products);  
+                          products.forEach(p => {
+                            let tr = document.createElement('tr');
+                            tr.setAttribute('class','contentCenterAlign');
+                            tr.append(createTdWithInnerText(p.id));
+                            tr.append(createTdWithInnerText(p.categoryId));
+                            tr.append(createTdWithInnerText(p.name));
+                            tr.append(createTdWithInnerText(p.model));
+                            tr.append(createTdWithInnerImage(p.photo));
+                            tr.append(createTdWithInnerText(p.price));
+                            tr.append(createTdWithInnerText(p.quantity));
+                            tr.append(createTdWithInnerText(p.sold));
+                            createControlButtons(tr, p.id);
+                            tr.append(createTdWithCheckBox((p.statusId == 1),p.id));
+                            table.append(tr);
+                          });
+                        }
+                    });
+
+}
+catch (ex) { }
 }
 document.addEventListener("DOMContentLoaded", load);

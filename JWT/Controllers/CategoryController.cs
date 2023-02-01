@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.Controllers;
-[ApiController, Authorize]
+[ApiController]
 [Route("api/[controller]")]
 public class CategoryController : ControllerBase
 {
