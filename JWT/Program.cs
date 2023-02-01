@@ -45,15 +45,15 @@ builder.Services.AddSwaggerGen(options => {
 });
 
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepo<>));
-builder.Services.AddTransient<ISmartphoneRepository, SmartphoneRepo>();
+builder.Services.AddTransient<IProductRepository, ProductRepo>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepo>();
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
-builder.Services.AddDbContext<SmartphonesDbContext>(options =>
+builder.Services.AddDbContext<AssetStoreDbContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection"),
-    b => b.MigrationsAssembly(typeof(SmartphonesDbContext).Assembly.FullName)));
+    b => b.MigrationsAssembly(typeof(AssetStoreDbContext).Assembly.FullName)));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<SmartphonesDbContext>()
+    .AddEntityFrameworkStores<AssetStoreDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddAuthentication(opt => 

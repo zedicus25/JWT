@@ -3,12 +3,12 @@ using Domain.Models;
 
 namespace Domain.Interfaces
 {
-    public interface ISmartphoneRepository: IGenericRepository<Smartphone>
+    public interface IProductRepository: IGenericRepository<Product>
     {
-        Task<List<Smartphone>> GetByCategoryId(int id);
+        Task<List<Product>> GetByCategoryId(int id);
 
         void SetStatus(int smartphoneId, int statusId);
 
-        Smartphone GetSmartphoneById(int smartphoneId);
+        Product GetProductById(int smartphoneId);
     }
 }

@@ -5,21 +5,21 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataAcessEF.Repositories
 {
-    public class SmartphoneRepo : GenericRepo<Smartphone>, ISmartphoneRepository
+    public class ProductRepo : GenericRepo<Product>, IProductRepository
     {
-        public SmartphoneRepo(SmartphonesDbContext dbContext) : base(dbContext)
+        public ProductRepo(AssetStoreDbContext dbContext) : base(dbContext)
         {
         }
 
-        public Task<List<Smartphone>> GetByCategoryId(int id) => 
-            _dbContext.Smartphones.Where(x => x.CategoryId == id && x.StatusId != 3).ToListAsync();
+        public Task<List<Product>> GetByCategoryId(int id) => 
+            _dbContext.Products.Where(x => x.CategoryId == id && x.StatusId != 3).ToListAsync();
 
-        public Smartphone GetSmartphoneById(int smartphoneId) => _dbContext.Smartphones.FirstOrDefault(x => x.Id == smartphoneId);
+        public Product GetProductById(int smartphoneId) => _dbContext.Products.FirstOrDefault(x => x.Id == smartphoneId);
      
 
         public void SetStatus(int smartphoneId, int statusId)
         {
-            var smartphone = _dbContext.Smartphones.FirstOrDefault(x => x.Id == smartphoneId);
+            var smartphone = _dbContext.Products.FirstOrDefault(x => x.Id == smartphoneId);
             if(smartphone != null)
             {
                 smartphone.StatusId = statusId;

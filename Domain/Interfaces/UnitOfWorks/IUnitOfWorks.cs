@@ -3,7 +3,7 @@
     public interface IUnitOfWorks : IDisposable
     {
         public ICategoryRepository CategoryRepository { get; }
-        public ISmartphoneRepository SmartphoneRepository { get; }
+        public IProductRepository ProductRepository { get; }
 
         int Commit();
     }

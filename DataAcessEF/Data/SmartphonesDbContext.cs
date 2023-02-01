@@ -6,16 +6,16 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAcessEF.Data
 {
-    public partial class SmartphonesDbContext : IdentityDbContext<IdentityUser>
+    public partial class AssetStoreDbContext : IdentityDbContext<IdentityUser>
     {
         protected readonly IConfiguration Configuration;
-        public SmartphonesDbContext(DbContextOptions configuration) : base(configuration)
+        public AssetStoreDbContext(DbContextOptions configuration) : base(configuration)
         {
         }
 
         public virtual DbSet<Category> Categories { get; set; }
-
-        public virtual DbSet<Smartphone> Smartphones { get; set; }
+        public virtual DbSet<SubCategory> SubCategories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

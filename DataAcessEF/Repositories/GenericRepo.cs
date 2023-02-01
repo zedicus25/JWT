@@ -6,9 +6,9 @@ namespace DataAcessEF.Repositories
 {
     public class GenericRepo<T> : IGenericRepository<T> where T : class
     {
-        protected readonly SmartphonesDbContext _dbContext;
+        protected readonly AssetStoreDbContext _dbContext;
 
-        public GenericRepo(SmartphonesDbContext dbContext)
+        public GenericRepo(AssetStoreDbContext dbContext)
         {
             this._dbContext = dbContext;
         }

@@ -21,12 +21,12 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("productsList")]
-    public async Task<ActionResult<IEnumerable<Smartphone>>> Get()
+    public async Task<ActionResult<IEnumerable<Product>>> Get()
     {
-        List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
+        List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
         if (smartphones == null)
         {
-            var smartphonesSql = _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.StatusId != 3);
+            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3);
             if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
@@ -39,15 +39,15 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("getProductsInCategory")]
-    public async Task<ActionResult<IEnumerable<Smartphone>>> GetByCategoryId(int categoryId) =>
-        await _unitOfWorks.SmartphoneRepository.GetByCategoryId(categoryId);
+    public async Task<ActionResult<IEnumerable<Product>>> GetByCategoryId(int categoryId) =>
+        await _unitOfWorks.ProductRepository.GetByCategoryId(categoryId);
 
     [HttpPost]
     [Authorize(Roles = UserRoles.Admin)]
     [Route("setStatus")]
     public ActionResult SetStatus(int productId, int statusId)
     {
-        _unitOfWorks.SmartphoneRepository.SetStatus(productId, statusId);
+        _unitOfWorks.ProductRepository.SetStatus(productId, statusId);
         if (_unitOfWorks.Commit() > 0)
             return Ok();
         return NotFound();
@@ -57,11 +57,11 @@ public class ProductsController : ControllerBase
     [Route("deleteProduct")]
     public ActionResult DeleteProduct(int productId)
     {
-        _unitOfWorks.SmartphoneRepository.SetStatus(productId, 3);
+        _unitOfWorks.ProductRepository.SetStatus(productId, 3);
         if (_unitOfWorks.Commit() > 0)
         {
-            List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
-            var smartphonesSql = _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.StatusId != 3);
+            List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
+            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3);
             if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
@@ -75,16 +75,16 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("getProduct")]
-    public ActionResult<Smartphone> GetProduct(int productId)
+    public ActionResult<Product> GetProduct(int productId)
     {
-        List<Smartphone> smartphones = _cacheService.GetData<List<Smartphone>>("Smartphone");
+        List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
         if (smartphones.Count() > 0)
         {
             var smart = smartphones.FirstOrDefault(x => x.Id == productId);
             if (smart != null)
                 return smart;
         }
-        var smart1 = _unitOfWorks.SmartphoneRepository.GetSmartphoneById(productId);
+        var smart1 = _unitOfWorks.ProductRepository.GetProductById(productId);
         if (smart1 != null)
             return smart1;
         return NotFound();
@@ -93,18 +93,18 @@ public class ProductsController : ControllerBase
 
     [HttpPost]
     [Route("addProduct")]
-    public IActionResult AddProduct(Smartphone smartphone)
+    public IActionResult AddProduct(Product smartphone)
     {
-        _unitOfWorks.SmartphoneRepository.Add(smartphone);
+        _unitOfWorks.ProductRepository.Add(smartphone);
         if (_unitOfWorks.Commit() > 0)
             return Ok();
         return BadRequest();
     }
     [HttpPut]
     [Route("updateProduct")]
-    public IActionResult UpdateProduct(Smartphone smartphone)
+    public IActionResult UpdateProduct(Product smartphone)
     {
-        _unitOfWorks.SmartphoneRepository.Update(smartphone);
+        _unitOfWorks.ProductRepository.Update(smartphone);
         if (_unitOfWorks.Commit() > 0)
             return Ok();
         return BadRequest();
@@ -112,9 +112,9 @@ public class ProductsController : ControllerBase
 
     [HttpGet]
     [Route("findProduct")]
-    public async Task<ActionResult<IEnumerable<Smartphone>>> FindProducts(string productName)
+    public async Task<ActionResult<IEnumerable<Product>>> FindProducts(string productName)
     {
-        var smart1 = _unitOfWorks.SmartphoneRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()));
+        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()));
         if (smart1 != null)
             return smart1.ToList();
         return NotFound();

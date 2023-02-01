@@ -10,15 +10,15 @@ namespace DataAcessEF.UnitOfWorks
 
         public ICategoryRepository CategoryRepository { get; }
 
-        public ISmartphoneRepository SmartphoneRepository { get; }
+        public IProductRepository ProductRepository { get; }
 
-        private readonly SmartphonesDbContext _dbContext;
+        private readonly AssetStoreDbContext _dbContext;
 
-        public UnitOfWorks(SmartphonesDbContext context)
+        public UnitOfWorks(AssetStoreDbContext context)
         {
             _dbContext = context;
             CategoryRepository = new CategoryRepo(_dbContext);
-            SmartphoneRepository = new SmartphoneRepo(_dbContext);
+            ProductRepository = new ProductRepo(_dbContext);
         }
 
         public int Commit() => _dbContext.SaveChanges();
