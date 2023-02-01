@@ -62,10 +62,10 @@ function LoadCategories() {
                                 tr.setAttribute('class','contentCenterAlign');
                                 tr.append(createTdWithInnerText(p.id));
                                 tr.append(createTdWithInnerText(p.categoryId));
+                                tr.append(createTdWithInnerText(p.subCategoryId));
                                 tr.append(createTdWithInnerText(p.name));
-                                tr.append(createTdWithInnerText(p.model));
                                 tr.append(createTdWithInnerImage(p.photo));
-                                tr.append(createTdWithInnerText(p.price));
+                                tr.append(createTdWithInnerText(p.price + "$"));
                                 tr.append(createTdWithInnerText(p.quantity));
                                 tr.append(createTdWithInnerText(p.sold));
                                 createControlButtons(tr, p.id);
@@ -105,8 +105,8 @@ function createHeadersForProductsTable(){
     tr.setAttribute('class','contentCenterAlign');
     tr.append(createTdWithInnerText('Id'));
     tr.append(createTdWithInnerText('Category'));
+    tr.append(createTdWithInnerText('SubCategoryId'));
     tr.append(createTdWithInnerText('Name'));
-    tr.append(createTdWithInnerText('Model'));
     tr.append(createTdWithInnerText('Photo'));
     tr.append(createTdWithInnerText('Price'));
     tr.append(createTdWithInnerText('Quantity'));
@@ -158,7 +158,7 @@ function createControlButtons(parentNode, productId) {
                 $("#updateInput").attr("class", "flexBox flexBox-vertical visible");
                 $("#nameUpdateInput").val(response.name);
                 $("#idUpdateInput").val(response.id);
-                $("#modelUpdateInput").val(response.model);
+                $("#subCategoryIdUpdateInput").val(response.subCategoryId);
                 $("#categoryIdUpdateInput").val(response.categoryId);
                 $("#photoUpdateInput").val(response.photo);
                 $("#priceUpdateInput").val(response.price);
@@ -207,7 +207,7 @@ function updateProduct(){
         category: null,
         categoryId: $("#categoryIdUpdateInput").val(),
         id: $('#idUpdateInput').val(),
-        model: $("#modelUpdateInput").val(),
+        subCategoryId: $("#subCategoryIdUpdateInput").val(),
         name: $("#nameUpdateInput").val(),
         photo: $("#photoUpdateInput").val(),
         price: $("#priceUpdateInput").val(),
@@ -233,7 +233,7 @@ function updateProduct(){
     $("#updateInput").attr("class", "flexBox flexBox-vertical unVisible");
     $("#nameUpdateInput").val("");
     $("#idUpdateInput").val("");
-    $("#modelUpdateInput").val("");
+    $("#subCategoryIdUpdateInput").val("");
     $("#categoryIdUpdateInput").val("");
     $("#photoUpdateInput").val("");
     $("#priceUpdateInput").val("");
@@ -246,7 +246,7 @@ function addProduct(){
         category: null,
         categoryId: $("#categoryIdAddInput").val(),
         id: 0,
-        model: $("#modelAddInput").val(),
+        subCategoryId: $("#subCategoryAddInput").val(),
         name: $("#nameAddInput").val(),
         photo: $("#photoAddInput").val(),
         price: $("#priceAddInput").val(),
@@ -270,7 +270,7 @@ function addProduct(){
     });
     alert("Added!");
     $("#nameAddInput").val("");
-    $("#modelAddInput").val("");
+    $("#subCategoryAddInput").val("");
     $("#categoryIdAddInput").val("");
     $("#photoAddInput").val("");
     $("#priceAddInput").val("");
@@ -296,16 +296,16 @@ try {
                         {
                             let table = document.getElementById("productsTable");
                         table.innerHTML ="";
-                            console.log(products);  
+                        createHeadersForProductsTable();
                           products.forEach(p => {
                             let tr = document.createElement('tr');
                             tr.setAttribute('class','contentCenterAlign');
                             tr.append(createTdWithInnerText(p.id));
                             tr.append(createTdWithInnerText(p.categoryId));
+                            tr.append(createTdWithInnerText(p.subCategoryId));
                             tr.append(createTdWithInnerText(p.name));
-                            tr.append(createTdWithInnerText(p.model));
                             tr.append(createTdWithInnerImage(p.photo));
-                            tr.append(createTdWithInnerText(p.price));
+                            tr.append(createTdWithInnerText(p.price + "$"));
                             tr.append(createTdWithInnerText(p.quantity));
                             tr.append(createTdWithInnerText(p.sold));
                             createControlButtons(tr, p.id);

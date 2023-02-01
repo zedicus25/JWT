@@ -46,19 +46,20 @@ function load() {
         let login = document.getElementById('passwordInput').value;
         let pas = document.getElementById('passwordInput').value;
         let pasAgain = document.getElementById('passwordInputAgain').value;
+        let email = document.getElementById('emailInput').value;
         
         if(pas !== pasAgain || login === "" || pas === "")
             return;
         
         let user = {
-            id: 0,
-            login: login,
-            password: pas
+            UserName: login,
+            password: pas,
+            email: email
         };
         try {
             $.ajax({
                 type: "POST",
-                url: "https://localhost:7167/api/Users/AddUser",
+                url: "https://localhost:7167/api/Authentication/regManager",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: JSON.stringify(user),
@@ -70,6 +71,7 @@ function load() {
             document.getElementById('passwordInput').value = "";
             document.getElementById('passwordInputAgain').value = "";
             document.getElementById('loginInput').value = "";
+            document.getElementById('emailInput').value = "";
             document.getElementById('signInForm').setAttribute('class', 'visible');
             document.getElementById('signUpForm').setAttribute('class', 'unVisible');
         }
@@ -95,7 +97,7 @@ function GoToAdminPanel() {
             success: function (data)
             {
                 if(data != null)
-                    open('./adminPage.html');
+                    open('./managerPanel.html');
             }
         });
     }

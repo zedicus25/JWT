@@ -14,11 +14,35 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div id="mainNavbar" class="nav justify-content-center">
+    <div id="mainContent">
+        <div id="mainNavbar" class="nav justify-content-center">
+        </div>
+        <div id="popularCardsContainer" class="flexBox flexBox-horizontal">
+        </div>
+        
     </div>
-    <div id="allcardsContainer" class="flexBox flexBox-horizontal">
+    
 
+    <div id="signInForm" class="unVisible">
+        <form class="flexBox flexBox-vertical align-center">
+            <input id="signInLoginInput" class="margin-10 form-control" type="text" placeholder="Login">
+            <input id="signInPasswordInput" class="margin-10 form-control" type="password" placeholder="Password">
+            <input id="loginBtn" class="margin-10 btn btn-primary" type="button" value="Sign in" >
+            <input id="goToSignUpBtn" class="btn btn-link" type="button" value="Sign Up">
+            <input id="backBtnLogin" class="margin-10 btn btn-warning" type="button" value="Back" >
+        </form>
     </div>
+<div id="signUpForm" class="unVisible">
+    <form class="flexBox flexBox-vertical align-center">
+        <input id="loginInput" class="margin-10 form-control" type="text" placeholder="Login">
+        <input id="emailInput" class="margin-10 form-control" type="email" placeholder="Email">
+        <input id="passwordInput" class="margin-10 form-control" type="password" placeholder="Password">
+        <input id="passwordInputAgain" class="margin-10 form-control" type="password" placeholder="Repeat password">
+        <input id="signUpBtn" class="margin-10 btn btn-primary" type="button" value="Sign up">
+        <input id="goToSignInBtn" class="btn btn-link" type="button" value="Sign In">
+        <input id="backBtnReg" class="margin-10 btn btn-warning" type="button" value="Back" >
+    </form>
+</div>
 </div>
 </body>
 </html> 

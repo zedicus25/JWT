@@ -7,7 +7,6 @@ using JWT.Roles;
 
 namespace JWT.Controllers;
 [ApiController]
-[Authorize]
 [Route("api/[controller]")]
 public class ProductsController : ControllerBase
 {
@@ -124,7 +123,7 @@ public class ProductsController : ControllerBase
     [Route("findProduct")]
     public async Task<ActionResult<IEnumerable<Product>>> FindProducts(string productName)
     {
-        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()));
+        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.Name.ToLower().Contains(productName.ToLower()) && x.StatusId != 3);
         if (smart1 != null)
             return smart1.ToList();
         return NotFound();

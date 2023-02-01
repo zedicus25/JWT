@@ -8,7 +8,7 @@
     <link href="../style.css" type="text/css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js" integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src = 'adminPageScript.js'></script>
+    <script src = 'managerPanel.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js" integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous"></script>
 </head>
@@ -38,8 +38,8 @@
         <tr id="productsTitles" class="contentCenterAlign">
             <td>Id</td>
             <td>CategoryId</td>
+            <td>SubCategoryId</td>
             <td>Name</td>
-            <td>Model</td>
             <td>Photo</td>
             <td>Price</td>
             <td>Quantity</td>
@@ -56,8 +56,8 @@
             <h3 class="margin-10">Add product</h3>
             <form id="inputAddForm" class="flexBox flexBox-vertical">
                 <input class="form-control margin-10" id="nameAddInput" type="text" placeholder="Name" minlength="5">
-                <input class="form-control margin-10" id="modelAddInput" type="text" placeholder="Model" minlength="5">
                 <input class="form-control margin-10" id="categoryIdAddInput" type="number" placeholder="Category Id" min="1">
+                <input class="form-control margin-10" id="subCategoryAddInput" type="number" placeholder="Sub Category Id" min="1">
                 <input class="form-control margin-10" id="photoAddInput" type="text" placeholder="Photo link" minlength="25">
                 <input class="form-control margin-10" id="priceAddInput" type="number" placeholder="Price" min="1">
                 <input class="form-control margin-10" id="quantityAddInput" type="number" placeholder="Quantity" min="1">
@@ -77,8 +77,8 @@
             <form id="inputUpdateForm" class="flexBox flexBox-vertical">
                 <input class="form-control margin-10" id="idUpdateInput" disabled readonly type="text" placeholder="Name" minlength="5">
                 <input class="form-control margin-10" id="nameUpdateInput" type="text" placeholder="Name" minlength="5">
-                <input class="form-control margin-10" id="modelUpdateInput" type="text" placeholder="Model" minlength="5">
                 <input class="form-control margin-10" id="categoryIdUpdateInput" type="number" placeholder="Category Id" min="1">
+                <input class="form-control margin-10" id="subCategoryIdUpdateInput" type="number" placeholder="Sub Category Id" min="1">
                 <input class="form-control margin-10" id="photoUpdateInput" type="text" placeholder="Photo link" minlength="25">
                 <input class="form-control margin-10" id="priceUpdateInput" type="number" placeholder="Price" min="1">
                 <input class="form-control margin-10" id="quantityUpdateInput" type="number" placeholder="Quantity" min="1">
