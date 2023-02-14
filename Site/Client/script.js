@@ -24,7 +24,7 @@ function loadCategories(){
     $.ajax({
         async: true,
         type: "GET",
-        url: `https://localhost:7167/api/Category/categoryList`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Category/categoryList`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         headers: {
@@ -41,7 +41,7 @@ function loadCategories(){
                 if(sessionStorage.getItem("AccessToken") == null)
                     return;
                 sessionStorage.setItem('CategoryId', `categoryId=${p.id}`);
-                open('./producPage.html');
+                open('producPage.html');
             });
             div.innerText = p.name;
             parent.append(div);
@@ -76,7 +76,7 @@ function login(){
 
         type: "POST",
 
-        url: "https://localhost:7167/api/Authentication/login",
+        url: "http://wonof44260-001-site1.itempurl.com/api/Authentication/login",
 
         data: JSON.stringify(user),
 
@@ -113,7 +113,7 @@ function registration(){
     try {
         $.ajax({
             type: "POST",
-            url: "https://localhost:7167/api/Authentication/regUser",
+            url: "http://wonof44260-001-site1.itempurl.com/api/Authentication/regUser",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(user),

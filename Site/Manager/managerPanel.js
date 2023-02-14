@@ -14,7 +14,7 @@ function LoadCategories() {
         $.ajax({
             async: true,
             type: "GET",
-            url: "https://localhost:7167/api/Category/categoryList",
+            url: "http://wonof44260-001-site1.itempurl.com/api/Category/categoryList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: {
@@ -31,7 +31,7 @@ function LoadCategories() {
                     $.ajax({
                         async: true,
                         type: "GET",
-                        url: `https://localhost:7167/api/Category/productsCountInCategory?categoryId=${parseInt(element.id)}`,
+                        url: `http://wonof44260-001-site1.itempurl.com/api/Category/productsCountInCategory?categoryId=${parseInt(element.id)}`,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         headers: {
@@ -49,7 +49,7 @@ function LoadCategories() {
                         $.ajax({
                             async: true,
                             type: "GET",
-                            url: `https://localhost:7167/api/Products/getProductsInCategory?categoryId=${parseInt(element.id)}`,
+                            url: `http://wonof44260-001-site1.itempurl.com/api/Products/getProductsInCategory?categoryId=${parseInt(element.id)}`,
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             headers: {
@@ -128,7 +128,7 @@ function createControlButtons(parentNode, productId) {
         $.ajax({
             async: true,
             type: "DELETE",
-            url: `https://localhost:7167/api/Products/deleteProduct?productId=${productId}`,
+            url: `http://wonof44260-001-site1.itempurl.com/api/Products/deleteProduct?productId=${productId}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: {
@@ -148,7 +148,7 @@ function createControlButtons(parentNode, productId) {
         $.ajax({
             async: true,
             type: "GET",
-            url: `https://localhost:7167/api/Products/getProduct?productId=${productId}`,
+            url: `http://wonof44260-001-site1.itempurl.com/api/Products/getProduct?productId=${productId}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: {
@@ -187,7 +187,7 @@ function createTdWithCheckBox(checked, productId){
         $.ajax({
             async: true,
             type: "POST",
-            url: `https://localhost:7167/api/Products/setStatus?productId=${productId}&statusId=${checBox.checked? 1 : 2}`,
+            url: `http://wonof44260-001-site1.itempurl.com/api/Products/setStatus?productId=${productId}&statusId=${checBox.checked? 1 : 2}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: {
@@ -219,7 +219,7 @@ function updateProduct(){
     $.ajax({
         async: true,
         type: "PUT",
-        url: `https://localhost:7167/api/Products/updateProduct`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Products/updateProduct`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify(product),
@@ -258,7 +258,7 @@ function addProduct(){
     $.ajax({
         async: true,
         type: "POST",
-        url: `https://localhost:7167/api/Products/addProduct`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Products/addProduct`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         data: JSON.stringify(product),
@@ -286,7 +286,7 @@ try {
                     $.ajax({
                         async: true,
                         type: "GET",
-                        url: `https://localhost:7167/api/Products/findProduct?productName=${name}`,
+                        url: `http://wonof44260-001-site1.itempurl.com/api/Products/findProduct?productName=${name}`,
                         contentType: "application/json; charset=utf-8",
                         dataType: "json",
                         headers: {

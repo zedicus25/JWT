@@ -13,7 +13,7 @@ function load() {
 
             type: "POST",
 
-            url: "https://localhost:7167/api/Authentication/login",
+            url: "http://wonof44260-001-site1.itempurl.com/api/Authentication/login",
 
             data: JSON.stringify(user),
 
@@ -59,7 +59,7 @@ function load() {
         try {
             $.ajax({
                 type: "POST",
-                url: "https://localhost:7167/api/Authentication/regManager",
+                url: "http://wonof44260-001-site1.itempurl.com/api/Authentication/regManager",
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 data: JSON.stringify(user),
@@ -88,7 +88,7 @@ function GoToAdminPanel() {
         $.ajax({
             async: true,
             type: "GET",
-            url: "https://localhost:7167/api/Products/productsList",
+            url: "http://wonof44260-001-site1.itempurl.com/api/Products/productsList",
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             headers: {

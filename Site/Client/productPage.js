@@ -8,7 +8,7 @@ function loadCategories(){
     $.ajax({
         async: true,
         type: "GET",
-        url: `https://localhost:7167/api/Category/categoryList`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Category/categoryList`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         headers: {
@@ -38,7 +38,7 @@ function loadSubCategories(){
     $.ajax({
         async: true,
         type: "GET",
-        url: `https://localhost:7167/api/Category/subCategoryList`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Category/subCategoryList`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         headers: {
@@ -80,7 +80,7 @@ function loadProducts(){
     $.ajax({
         async: true,
         type: "GET",
-        url: `https://localhost:7167/api/Products/getProductsInCategory?${sessionStorage.getItem('CategoryId')}`,
+        url: `http://wonof44260-001-site1.itempurl.com/api/Products/getProductsInCategory?${sessionStorage.getItem('CategoryId')}`,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         headers: {
@@ -123,7 +123,7 @@ function loadProducts(){
 
 function findProductsInSubCategories(){
     let checks = document.getElementsByClassName('form-check-input');
-    let path = 'https://localhost:7167/api/Products/getProductsInSubCategories?';
+    let path = 'http://wonof44260-001-site1.itempurl.com/api/Products/getProductsInSubCategories?';
     for(let i = 0; i < checks.length; i++){
         if(checks[i].checked){
             path += checks[i].id + "&";
