@@ -135,4 +135,15 @@ public class ProductsController : ControllerBase
         return NotFound();
 
      }
+
+    [HttpGet]
+    [Route("getPopularProducts")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetPopular()
+    {
+        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2);
+        if (smart1 != null)
+            return smart1.ToList();
+        return NotFound();
+
+    }
 }
