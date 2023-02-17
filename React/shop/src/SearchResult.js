@@ -1,8 +1,8 @@
 import { Component } from 'react';
 import ProductCard from './ProductCard';
-import './PopularProducts.css'
+import './SearchResult.css'
 
-class PopularProducts extends Component{
+class SearchResult extends Component{
     constructor(props){
         super(props);
     }
@@ -12,8 +12,7 @@ class PopularProducts extends Component{
             return <ProductCard key={`productdId=${x.id}`} productId={`productdId=${x.id}`} productImg={x.photo} productName={x.name} productPrice={x.price}></ProductCard>
         });
         return(
-            <div className='popular-products-wrap'>
-                <h1>Popular assests:</h1>
+            <div className='products-wrap'>
                 <div className='flexbox'>
                     {items}
                 </div>
@@ -21,4 +20,4 @@ class PopularProducts extends Component{
         );
     }
 }
-export default PopularProducts;
+export default SearchResult;

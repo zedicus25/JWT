@@ -41,3 +41,12 @@ a:hover{
     padding-right: 70px;
 }
 
+.controls-btn{
+    float: right;
+    margin-top: -52px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.margin-right-5{
+    margin-right: 5px;
+}

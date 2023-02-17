@@ -1,0 +1,19 @@
+.flexBox-form{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .justify-center-form{
+    display: flex;
+    justify-content: center;
+  }
+
+  .input-form{
+    margin-top: 5px;
+    font-size: large;
+  }
+
+  .paddingTB-50{
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
