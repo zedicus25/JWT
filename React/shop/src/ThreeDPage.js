@@ -1,24 +1,41 @@
 import NavigationBar from './NavigationBar';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-function ThreeDPage() {
-    return (
-      <div>
-        <NavigationBar></NavigationBar>
-        <Container>
-      <Row>
-        <Col>1 of 2</Col>
-        <Col>2 of 2</Col>
-      </Row>
-      <Row>
-        <Col>1 of 3</Col>
-        <Col>2 of 3</Col>
-        <Col>3 of 3</Col>
-      </Row>
-    </Container>
+import "./ThreeDPage.css";
+import { Component, useEffect, useState } from 'react';
+import SubCategoriesFilter from './SubCategoriesFilter';
+import ProductsControl from './ProductsControl';
+
+class ThreeDPage extends Component {
+  constructor(props){
+    super(props);
+  }
+
+   componentDidMount() {
+    if(this.props.products.length > 0)
+      console.log("3d load")
+   }
+ 
+
+    render (){    
+      return(
+        <div>
+      <NavigationBar 
+        twoDClick={this.props.twoDClick} 
+        threeDClick={this.props.threeDClick} 
+        vfxClick = {this.props.vfxClick}
+        addOnsClick={this.props.addOnsClick}
+        audioClick={this.props.audioClick}>
+        </NavigationBar>
+      <div className='main-grid'>
+        <div className='products-grid'>
+          <ProductsControl  products={this.props['products']}></ProductsControl>
+        </div>
+        <div className='controls-grid'>
+          <SubCategoriesFilter subCategoriClick={this.props.subCategoriClick}  subCategories = {this.props.subCategories}></SubCategoriesFilter>
+        </div>
       </div>
-    );
+    </div>
+      );
+    }
   }
   
   export default ThreeDPage;

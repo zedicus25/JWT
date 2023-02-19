@@ -12,7 +12,7 @@ import RegistrationModal from './RegistrationModal';
 
 
 
-function NavigationBar(){
+function NavigationBar(props){
     const [loginModalShow, setLoginModalShow] = useState(false);
     const [regModalShow, setRegModalShow] = useState(false);
 
@@ -24,19 +24,19 @@ function NavigationBar(){
                     <Link to='/'>Home</Link>
                 </li>
                 <li>
-                    <Link to='/threedpage'>3D</Link>
+                    <Link onClick={props.threeDClick}  to='/threedpage'>3D</Link>
+                </li>
+                <li >
+                    <Link onClick={props.twoDClick} to='/twodpage'>2D</Link>
                 </li>
                 <li>
-                    <Link to='/twodpage'>2D</Link>
+                    <Link onClick={props.addOnsClick} to='/addonspage'>Add-Ons</Link>
                 </li>
                 <li>
-                    <Link to='/addonspage'>Add-Ons</Link>
+                    <Link onClick={props.audioClick} to='/audiopage'>Audio</Link>
                 </li>
                 <li>
-                    <Link to='/audiopage'>Audio</Link>
-                </li>
-                <li>
-                    <Link to='/vfxpage'>VFX</Link>
+                    <Link onClick={props.vfxClick} to='/vfxpage'>VFX</Link>
                 </li>
             </ul> 
             

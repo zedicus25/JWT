@@ -1,23 +1,17 @@
 import NavigationBar from './NavigationBar';
-import ThreeDPage from './ThreeDPage';
-import TwoDPage from './TwoDPage';
-import AddOnsPage from './AddOnsPage';
-import AudioPage from './AudioPage';
-import VFXPage from './VFXPage';
 import SearchResult from './SearchResult';
 import PopularProducts from './PopularProducts';
 
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import { useState, useEffect } from 'react';
-import { Alert } from 'bootstrap';
 
-function MainPage(){
+function MainPage(props){
 
     const url = "http://wonof44260-001-site1.itempurl.com/api";
 
     const [products, setProducts] = useState([]);
+
     let searchText = "";
     const [visibly, setVisibility] = useState(true);
     const [canGet, setCanGet] = useState(true);
@@ -33,6 +27,7 @@ function MainPage(){
                 }
               });
         }
+
         
     });
 
@@ -71,7 +66,7 @@ function MainPage(){
 
     return(
         <div>
-               <NavigationBar></NavigationBar>
+               <NavigationBar twoDClick={props.twoDClick}  threeDClick={props.threeDClick}></NavigationBar>
         <div id='displaying-products'>
       <div style={{display: visibly ? "block":'none'}}>
         <PopularProducts products={products}></PopularProducts>

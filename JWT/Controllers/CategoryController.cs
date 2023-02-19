@@ -3,6 +3,8 @@ using Domain.Models;
 using JWT.Cache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
+using System.Security.Cryptography.Xml;
 
 namespace JWT.Controllers;
 [ApiController]
@@ -73,4 +75,6 @@ public class CategoryController : ControllerBase
     public async Task<ActionResult<int>> GetCountInCategory([FromQuery(Name = "categoryId")] int categoryId) =>  
         await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
 
+
+    
 }
