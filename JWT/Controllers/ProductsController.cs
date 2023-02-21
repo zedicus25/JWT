@@ -44,6 +44,29 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
+    [Route("productsInPage")]
+    public async Task<ActionResult<IEnumerable<Product>>> Get([FromQuery(Name ="perPage")] int perPage, [FromQuery(Name = "page")] int page)
+    {
+        var products = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList();
+        int startIndex = perPage * (page-1);
+        try
+        {
+            var res = products.GetRange(startIndex, perPage);
+            return res;
+        }
+        catch (ArgumentException ex)
+        {
+            Product start = products.ElementAtOrDefault(startIndex);
+            if(start == null)
+                return new List<Product>();
+            int endIndex = products.LastIndexOf(products.Last())+1;
+            return products.GetRange(startIndex, endIndex - startIndex);
+        }
+        
+        
+    }
+
+    [HttpGet]
     [Route("getProductsInCategory")]
     public async Task<ActionResult<IEnumerable<Product>>> GetByCategoryId([FromQuery(Name = "categoryId")] int categoryId) =>
         await _unitOfWorks.ProductRepository.GetByCategoryId(categoryId);

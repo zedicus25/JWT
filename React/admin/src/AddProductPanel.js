@@ -17,6 +17,7 @@ const [categoryId, setCategoryId] = useState(1);
 const [subCategoryId, setSubCategoryId] = useState(1);
 
 useEffect(() => {
+    if(subCategories.length <= 0)
       axios.get(`${url}/Category/subCategoryList`,{
         headers:{
             'content-type': 'text/json',
@@ -36,7 +37,7 @@ useEffect(() => {
             });
         }
       });
-
+      if(categories.length <= 0)
       axios.get(`${url}/Category/categoryList`,{
         headers:{
             'content-type': 'text/json',
