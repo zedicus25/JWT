@@ -8,7 +8,6 @@ const url = "http://wonof44260-001-site1.itempurl.com/api";
 const [categories, setCategories] = useState([]);
 const [products, setProducts] = useState([]);
 const [subCategories, setSubCategories] = useState([]);
-const [modalShow, setModalShow] = useState(false);
 useEffect(() =>{
     if(categories.length <= 0)
     axios.get(`${url}/Category/subCategoryList`,{

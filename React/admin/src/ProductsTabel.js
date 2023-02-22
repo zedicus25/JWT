@@ -65,7 +65,7 @@ export class ProducsTabel extends Component{
                         ))}
                     </tbody>
                 </table>
-                <UpdateModal selectedproduct={this.state.selectedproduct} onHide={() => this.setState({modalShow: false})} show={this.state.modalShow}></UpdateModal>
+                <UpdateModal subcategories={this.props.subCategories} categories={this.props.categories} selectedproduct={this.state.selectedproduct} onHide={() => this.setState({modalShow: false})} show={this.state.modalShow}></UpdateModal>
             </div>
         );
     }
