@@ -1,8 +1,8 @@
 import axios from "axios";
 import { Component } from "react";
-import { ProductRow } from "./ProductRow";
 import './ProductsTabel.css';
 import { UpdateModal } from "./UpdateModal";
+
 
 export class ProducsTabel extends Component{
     constructor(props){
