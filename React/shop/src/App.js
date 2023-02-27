@@ -1,10 +1,10 @@
 import './App.css';
-import MainPage from './MainPage';
-import ThreeDPage from './ThreeDPage';
-import TwoDPage from './TwoDPage';
-import AddOnsPage from './AddOnsPage';
-import AudioPage from './AudioPage';
-import VFXPage from './VFXPage';
+import MainPage from './Components/MainPage/MainPage';
+import ThreeDPage from './Components/ThreeDPage/ThreeDPage';
+import TwoDPage from './Components/TwoDPage/TwoDPage';
+import AudioPage from './Components/AudioPage/AudioPage';
+import VFXPage from './Components/VFXPage/VFXPage';
+import AddOnsPage from './Components/AddOnsPage/AddOnsPage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';

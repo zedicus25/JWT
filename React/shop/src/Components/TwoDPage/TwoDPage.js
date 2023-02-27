@@ -1,8 +1,8 @@
-import NavigationBar from './NavigationBar';
-import "./ThreeDPage.css";
+import NavigationBar from '../NavigationBar/NavigationBar';
+import "./TwoDPage.css";
 import { Component, useEffect, useState } from 'react';
-import SubCategoriesFilter from './SubCategoriesFilter';
-import ProductsControl from './ProductsControl';
+import SubCategoriesFilter from '../SubCategoriesFilter/SubCategoriesFilter';
+import ProductsControl from '../ProductsControl/ProductsControl';
 
 class TwoDPage extends Component {
   constructor(props){

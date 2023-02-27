@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ProductCard from './ProductCard';
+import ProductCard from '../ProductCard/ProductCard';
 import './SearchResult.css'
 
 class SearchResult extends Component{

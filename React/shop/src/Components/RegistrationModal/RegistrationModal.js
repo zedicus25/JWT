@@ -13,7 +13,7 @@ function RegistrationModal(props) {
     const [login, SetLogin] = useState("");
     function reg() { 
         if(email.includes('@') && email.includes('.')){
-            if(/^[A-Za-z0-9!@]*$/.test(pass) && /^[A-Za-z0-9!@]*$/.test(passAgain) && pass !== "" && pass === passAgain)
+            if(pass !== "")
             {
                 axios.post('http://wonof44260-001-site1.itempurl.com/api/Authentication/regUser', {
                     Email: email,

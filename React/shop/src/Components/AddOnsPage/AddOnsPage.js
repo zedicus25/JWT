@@ -1,8 +1,8 @@
-import NavigationBar from './NavigationBar';
+import NavigationBar from '../NavigationBar/NavigationBar';
 import "./AddOnsPage.css";
 import { Component, useEffect, useState } from 'react';
-import SubCategoriesFilter from './SubCategoriesFilter';
-import ProductsControl from './ProductsControl';
+import SubCategoriesFilter from '../SubCategoriesFilter/SubCategoriesFilter';
+import ProductsControl from '../ProductsControl/ProductsControl';
 
 class AddOnsPage extends Component {
   constructor(props){

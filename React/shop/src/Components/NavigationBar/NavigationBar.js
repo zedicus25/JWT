@@ -1,12 +1,12 @@
 import {Link, Outlet} from 'react-router-dom'
 import './NavigationBar.css';
-import SearchBlock from './SearchBlock';
+import SearchBlock from '../SearchBlock/SearchBlock';
 import Button from 'react-bootstrap/Button';
 
 import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
-import LoginModal from './LoginModal';
-import RegistrationModal from './RegistrationModal';
+import LoginModal from '../LoginModal/LoginModal';
+import RegistrationModal from '../RegistrationModal/RegistrationModal';
 
 
 

@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import ProductCard from './ProductCard';
+import ProductCard from '../ProductCard/ProductCard';
 import './PopularProducts.css'
 
 class PopularProducts extends Component{

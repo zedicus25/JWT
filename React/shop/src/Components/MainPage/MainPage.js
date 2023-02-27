@@ -1,6 +1,6 @@
-import NavigationBar from './NavigationBar';
-import SearchResult from './SearchResult';
-import PopularProducts from './PopularProducts';
+import NavigationBar from '../NavigationBar/NavigationBar';
+import SearchResult from '../SearchResult/SearchResult';
+import PopularProducts from '../PopularProducts/PopularProducts';
 
 import axios from 'axios';
 

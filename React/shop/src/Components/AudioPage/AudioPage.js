@@ -1,19 +1,15 @@
-import NavigationBar from './NavigationBar';
-import "./ThreeDPage.css";
+import NavigationBar from '../NavigationBar/NavigationBar';
+import "./AudioPage.css";
 import { Component, useEffect, useState } from 'react';
-import SubCategoriesFilter from './SubCategoriesFilter';
-import ProductsControl from './ProductsControl';
+import SubCategoriesFilter from '../SubCategoriesFilter/SubCategoriesFilter';
+import ProductsControl from '../ProductsControl/ProductsControl';
 
-class ThreeDPage extends Component {
+class AudioPage extends Component {
   constructor(props){
     super(props);
   }
 
-   componentDidMount() {
-    if(this.props.products.length > 0)
-      console.log("3d load")
-   }
- 
+  
 
     render (){    
       return(
@@ -38,4 +34,4 @@ class ThreeDPage extends Component {
     }
   }
   
-  export default ThreeDPage;
+  export default AudioPage;

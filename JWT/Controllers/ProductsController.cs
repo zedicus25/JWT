@@ -97,7 +97,7 @@ public class ProductsController : ControllerBase
         if (_unitOfWorks.Commit() > 0)
         {
             List<Product> smartphones = _cacheService.GetData<List<Product>>("Smartphone");
-            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 && x.StatusId != 2);
+            var smartphonesSql = _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 || x.StatusId != 2);
             if (smartphonesSql.Count() > 0)
             {
                 _cacheService.SetData("Smartphone", smartphonesSql, DateTimeOffset.Now.AddDays(1));
