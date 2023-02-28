@@ -1,84 +1,13 @@
 import NavigationBar from '../NavigationBar/NavigationBar';
-import SearchResult from '../SearchResult/SearchResult';
 import PopularProducts from '../PopularProducts/PopularProducts';
 
-import axios from 'axios';
-
-import { useState, useEffect } from 'react';
-
-function MainPage(props){
-
-    const url = "http://wonof44260-001-site1.itempurl.com/api";
-
-    const [products, setProducts] = useState([]);
-
-    let searchText = "";
-    const [visibly, setVisibility] = useState(true);
-    const [canGet, setCanGet] = useState(true);
-  
-    useEffect(() => {
-        if(canGet){
-            axios.get(`${url}/Products/getPopularProducts`).then(function (response) {
-                if(response.status == 200){
-                  setProducts(response.data);
-                  response.data.map(x => {
-                    products.push(x);
-                  });
-                }
-              });
-        }
-
-        
-    });
-
-
-    document.addEventListener('DOMContentLoaded', async ()  => {
-        let searchBtn = document.getElementById('search-btn');
-        searchBtn.addEventListener('click', () => searchAssets());
-        let searchInput = document.getElementById('search-input');
-        searchInput.addEventListener('change',(e) => {
-          searchText = e.target.value;
-        });
-      });
-
-
-    async function searchAssets(){
-        if(searchText == ""){
-            setCanGet(true);
-            setVisibility(true);
-            return;
-        }
-            
-        setCanGet(false);
-        setVisibility(false);   
-        await axios.get(`${url}/Products/findProduct?productName=${searchText}`).then(function (response) {
-          if(response.status == 200){
-            setProducts(response.data);
-            response.data.map(x => {
-              products.push(x);
-            });
-          }
-        });
-      
-      }
-
-
-
-    return(
-        <div>
-               <NavigationBar twoDClick={props.twoDClick}  threeDClick={props.threeDClick}></NavigationBar>
-        <div id='displaying-products'>
-      <div style={{display: visibly ? "block":'none'}}>
-        <PopularProducts products={products}></PopularProducts>
-      </div>
-      <div style={{display: visibly ? "none":'block'}}>
-        <SearchResult products={products}></SearchResult>
-      </div>
-    </div>
-        </div>
-     
-        
-    );
+const MainPage = () => {
+  return(
+    <div>
+      <NavigationBar ></NavigationBar>
+      <PopularProducts></PopularProducts>
+  </div>
+);
 }
 
 export default MainPage;

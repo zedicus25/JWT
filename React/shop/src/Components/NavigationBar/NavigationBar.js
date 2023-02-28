@@ -3,7 +3,6 @@ import './NavigationBar.css';
 import SearchBlock from '../SearchBlock/SearchBlock';
 import Button from 'react-bootstrap/Button';
 
-import Modal from 'react-bootstrap/Modal';
 import { useState } from 'react';
 import LoginModal from '../LoginModal/LoginModal';
 import RegistrationModal from '../RegistrationModal/RegistrationModal';

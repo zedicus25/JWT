@@ -1,4 +1,5 @@
 import './App.css';
+import api from './apiAccess'
 import MainPage from './Components/MainPage/MainPage';
 import ThreeDPage from './Components/ThreeDPage/ThreeDPage';
 import TwoDPage from './Components/TwoDPage/TwoDPage';
@@ -9,7 +10,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function App() {
+/*function App() {
 
   const url = "http://wonof44260-001-site1.itempurl.com/api";
 
@@ -70,13 +71,7 @@ await axios.get(subUrl).then(res => {
   return (
     <BrowserRouter>
         <Routes>
-          <Route path='/' element={<MainPage products={products} 
-          threeDClick={() => {loadProductsInCategory(1)}} 
-          twoDClick={() => loadProductsInCategory(2)} 
-          addOnsClick={() => loadProductsInCategory(3)}
-          audioClick={() => loadProductsInCategory(4)}
-          vfxClick = {() => loadProductsInCategory(5)}
-         />}></Route>
+          <Route path='/' element={<MainPage products={products} />}></Route>
           <Route path='/threedpage' element={<ThreeDPage products={products} 
           threeDClick={() => {loadProductsInCategory(1)}} 
           twoDClick={() => loadProductsInCategory(2)} 
@@ -119,6 +114,22 @@ await axios.get(subUrl).then(res => {
           subCategories={subCategories}/>}></Route>
         </Routes>
         </BrowserRouter>
+  );
+}*/
+
+
+const App = () => {
+  return(
+    <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<MainPage/>}></Route>
+          <Route path='/threedpage' element={<ThreeDPage/>}></Route>
+          <Route path='/twodpage' element={<TwoDPage/>}></Route>
+          <Route path='/addonspage' element={<AddOnsPage/>}></Route>
+          <Route path='/audiopage' element={<AudioPage/>}></Route>
+          <Route path='/vfxpage' element={<VFXPage/>}></Route>
+        </Routes>
+    </BrowserRouter>
   );
 }
 

@@ -1,27 +1,24 @@
-import { Component } from "react";
+import { useEffect } from "react";
 import Form from 'react-bootstrap/Form';
-import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import { getAsync as getSubCat, selectValues as getSubCategories } from "../../app/subCategoriesSlice";
 
-class SubCategoriesFilter extends Component{
-    constructor(props){
-        super(props);
-        
-    }
+const SubCategoriesFilter = () => {
+    const subCategories = useSelector(getSubCategories);
+    const dispatch = useDispatch();
 
-    render(){
+    useEffect(() => {
+        dispatch(getSubCat());
+    }, []);
 
-        let items = this.props.subCategories.map(x => {
-            return <Form.Check onClick={this.props.subCategoriClick}  key={`subCategory=${x.id}`} id={`subCategory=${x.id}`} type='checkbox' className="subcategory-input" label={x.name}></Form.Check >
-        });
-    
-
-        return(
-            <div>
-               <h5>Filters:</h5> 
-                {items}
-            </div>
-        );
-    }
+    return (
+        <div>
+            <h5>Filters:</h5>
+            {subCategories.map((x, idx) =>{
+                return <Form.Check key={idx} id={`subCategory=${x.id}`} type='checkbox' className="subcategory-input" label={x.name}></Form.Check>
+            })}
+        </div>
+    );
 }
 
 export default SubCategoriesFilter;

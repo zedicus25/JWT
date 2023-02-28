@@ -1,19 +1,33 @@
-.flexBox-form{
-    display: flex;
-    flex-direction: column;
-  }
 
-  .justify-center-form{
+
+  .Auth-form-container {
     display: flex;
     justify-content: center;
+    align-items: center;
+
+  }
+  
+  .Auth-form {
+    width: 420px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
+  .Auth-form-content {
+    padding-left: 12%;
+    padding-right: 12%;
+  }
+  
+  .Auth-form-title {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 24px;
+    color: rgb(34, 34, 34);
+    font-weight: 800;
   }
 
-  .input-form{
-    margin-top: 5px;
-    font-size: large;
-  }
-
-  .paddingTB-50{
-    padding-top: 50px;
-    padding-bottom: 50px;
+  .error-text{
+    font-size: 14px;
+    color: rgb(252, 40, 40);
+    font-weight: 600;
   }

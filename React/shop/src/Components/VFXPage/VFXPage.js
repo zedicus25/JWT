@@ -1,36 +1,35 @@
 import NavigationBar from '../NavigationBar/NavigationBar';
 import "./VFXPage.css";
-import { Component, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import SubCategoriesFilter from '../SubCategoriesFilter/SubCategoriesFilter';
 import ProductsControl from '../ProductsControl/ProductsControl';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProductsInCategory, selectValues } from '../../app/productsSlice';
 
-class VFXPage extends Component {
-  constructor(props){
-    super(props);
-  }
 
-  
+  const VFXPage = () => {
+    const assest = useSelector(selectValues);
+    const dispatch = useDispatch();
 
-    render (){     
-      return(
-        <div>
-      <NavigationBar 
-      vfxClick = {this.props.vfxClick} 
-      twoDClick={this.props.twoDClick}  
-      threeDClick={this.props.threeDClick}
-      addOnsClick={this.props.addOnsClick}
-      audioClick={this.props.audioClick}></NavigationBar>
+    useEffect(() => {
+      dispatch(getProductsInCategory({categoryId : 5}));
+      sessionStorage.setItem('categoryId', 5);
+    }, []);
+
+    return(
+      <div>
+      <NavigationBar ></NavigationBar>
       <div className='main-grid'>
         <div className='products-grid'>
-          <ProductsControl products={this.props.products}></ProductsControl>
+          <ProductsControl  products={assest}></ProductsControl>
         </div>
         <div className='controls-grid'>
-          <SubCategoriesFilter subCategoriClick={this.props.subCategoriClick}   subCategories = {this.props.subCategories}></SubCategoriesFilter>
+          <SubCategoriesFilter></SubCategoriesFilter>
         </div>
       </div>
     </div>
-      );
-    }
-  }
+    );
+  };
+  
   
   export default VFXPage;

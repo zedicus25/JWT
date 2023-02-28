@@ -1,24 +1,28 @@
-import { Component } from 'react';
 import ProductCard from '../ProductCard/ProductCard';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPopularAsync as getPopularAssets, selectValues as selectPopularProducts } from '../../app/productsSlice';
 import './PopularProducts.css'
 
-class PopularProducts extends Component{
-    constructor(props){
-        super(props);
-    }
+const PopularProducts = () => {
+    const popularProducts = useSelector(selectPopularProducts);
+    const dispatch = useDispatch();
 
-    render(){
-        let items = this.props['products'].map(x => {
-            return <ProductCard key={`productdId=${x.id}`} productId={`productdId=${x.id}`} productImg={x.photo} productName={x.name} productPrice={x.price}></ProductCard>
-        });
-        return(
-            <div className='popular-products-wrap'>
-                <h1>Popular assests:</h1>
-                <div className='flexbox'>
-                    {items}
-                </div>
-            </div>  
-        );
-    }
+  
+    useEffect(() => {
+      dispatch(getPopularAssets());
+    }, []);
+
+    return(
+        <div className='popular-products-wrap'>
+            <h1>Popular assests:</h1>
+            <div className='flexbox'>
+                {popularProducts.map((x, idx) => {
+                    return <ProductCard key={idx} productId={`productdId=${x.id}`} productImg={x.photo} productName={x.name} productPrice={x.price}></ProductCard>
+                })}
+            </div>
+        </div>
+    )
 }
+
 export default PopularProducts;
