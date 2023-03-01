@@ -5,7 +5,7 @@ const MainPage = () => {
   return(
     <div>
       <NavigationBar ></NavigationBar>
-      <PopularProducts></PopularProducts>
+      <PopularProducts></PopularProducts>   
   </div>
 );
 }

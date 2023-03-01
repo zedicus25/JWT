@@ -1,7 +1,9 @@
 import axios from "axios";
 import token from './jwtToken';
 
-const apiUrl = "https://jwt20230228183505.azurewebsites.net/api";
+const apiUrl = "http://wonof44260-001-site1.itempurl.com/api";
+//http://wonof44260-001-site1.itempurl.com
+//https://jwt20230228183505.azurewebsites.net
 
 
 const get = async (url) => {
@@ -56,6 +58,11 @@ const getProductsInCategory = async (state) => {
     return res;
 }
 
+const searchProducts = async(state) => {
+    let res = await get(`${apiUrl}/Products/findProduct?productName=${state.searchText}`);
+    return res;
+}
+
 
 //--------------------authorization--------------------
 const signIn = async(login, password) => {
@@ -72,7 +79,8 @@ const methods = {
     getPopularAssets: getPopularAssets,
     getProductsInCategory: getProductsInCategory,
     signIn : signIn,
-    signUp : signUp
+    signUp : signUp,
+    searchProducts: searchProducts
 }
 
 export default methods;

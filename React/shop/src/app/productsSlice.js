@@ -27,6 +27,14 @@ export const getProductsInCategory = createAsyncThunk(
     }
 )
 
+export const searchProducts = createAsyncThunk(
+    'products/searchProducts',
+    async(state) => {
+        const res = await api.searchProducts(state);
+        return res;   
+    }
+);
+
 export const productsSlice = createSlice({
     name: 'products',
     initialState: {
@@ -49,6 +57,12 @@ export const productsSlice = createSlice({
             }).addCase(getProductsInCategory.pending, (state) => {
                 state.status = 'loading';
             }).addCase(getProductsInCategory.fulfilled, (state, action) => {
+                state.values = [];
+                state.status = 'idle';
+                state.values = action.payload;
+            }).addCase(searchProducts.pending, (state) => {
+                state.status = 'loading';
+            }).addCase(searchProducts.fulfilled, (state, action) => {
                 state.values = [];
                 state.status = 'idle';
                 state.values = action.payload;

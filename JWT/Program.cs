@@ -50,7 +50,7 @@ builder.Services.AddTransient<ICategoryRepository, CategoryRepo>();
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
 builder.Services.AddDbContext<AssetStoreDbContext>(options =>
 options.UseSqlServer(
-    builder.Configuration.GetConnectionString("DefaultConnection"),
+    builder.Configuration.GetConnectionString("AzureConnection"),
     b => b.MigrationsAssembly(typeof(AssetStoreDbContext).Assembly.FullName)));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AssetStoreDbContext>()
