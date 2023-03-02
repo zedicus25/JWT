@@ -3,15 +3,15 @@ import api from '../apiAccess';
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 
 export const getAsync = createAsyncThunk(
-    'subCategories/getAll',
+    'categories/getAll',
     async () => {
-        const res = await api.getSubCategories();
+        const res = await api.getCategories();
         return res;
     }
 );
 
-export const subCategoriesSlice = createSlice({
-    name: 'subCategories',
+export const categoriesSlice = createSlice({
+    name: 'categories',
     initialState: {
         values : [],
         status: 'idle'
@@ -27,6 +27,6 @@ export const subCategoriesSlice = createSlice({
 });
 
 
-export const selectValues = (state) => state.subCategories.values;
+export const selectValues = (state) => state.categories.values;
 
-export default subCategoriesSlice.reducer
+export default categoriesSlice.reducer

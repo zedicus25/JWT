@@ -1,0 +1,24 @@
+ul{
+    list-style: none;
+    padding: 0px;
+}
+
+.dashboard li{
+    padding-top: 15px;
+    padding-bottom: 15px;
+    
+}
+
+.dashboard li a{
+    text-decoration:  none;
+    color: black;
+}
+
+.drop-menu{
+    padding-left: 15px;
+}
+
+.drop-menu li{
+    padding-top: 3px;
+    padding-bottom: 3px;
+}

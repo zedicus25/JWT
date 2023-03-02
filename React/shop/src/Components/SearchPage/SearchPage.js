@@ -16,7 +16,7 @@ const SearchPage = () => {
     useEffect(() => {
         dispatch(searchProducts({searchText: location.state.searchText}));
     },[]);
-    return(<div>
+    return(<div className='main-padding'>
         <NavigationBar/>
         <div className='main-grid'>
         <div className='products-grid'>

@@ -9,6 +9,8 @@ import MainManagerPage from './ManagerComponents/MainManagerPage/MainManagerPage
 import MainAdminPage from './AdminComponents/MainAdminPage/MainAdminPage';
 import SearchPage from './Components/SearchPage/SearchPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import AddProductPanel from './ManagerComponents/AddProductsPanel/AddProductPanel';
+import UpdateProductPanel from './ManagerComponents/UpdateProductsPanel/UpdateProductPanel';
 
 const App = () => {
   return(
@@ -22,6 +24,8 @@ const App = () => {
           <Route path='/vfxpage' element={<VFXPage/>}></Route>
           <Route path='/searchPage' element={<SearchPage/>}></Route>
           <Route path='/manager' element={<MainManagerPage/>}></Route>
+          <Route path='/manager/addproductpanel' element={<AddProductPanel/>}></Route>
+          <Route path='/manager/updateproductpanel' element={<UpdateProductPanel/>}></Route>
           <Route path='/admin' element={<MainAdminPage/>}></Route>
         </Routes>
     </BrowserRouter>

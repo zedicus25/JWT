@@ -42,6 +42,11 @@ const getSubCategories = async () => {
     return await get(`${apiUrl}/Category/subCategoryList`);
 }
 
+//---------------categories---------------------
+const getCategories = async() => {
+    return await get(`${apiUrl}/Category/categoryList`)
+}
+
 //-------------------products-------------------
 
 const getAllAssets = async () => {
@@ -63,6 +68,20 @@ const searchProducts = async(state) => {
     return res;
 }
 
+const addProduct = async(state) => {
+    let res = await post(`${apiUrl}/Products/addProduct`, {
+        Name: state.productName,
+        Price: state.productPrice,
+        Photo: state.productPhoto,
+        CategoryId: state.categoryId,
+        SubCategoryId: state.subCategoryId,
+        Quantity: state.quantity,
+        Sold: state.sold,
+        StatusId: 1
+    });
+    return  res;
+}
+
 
 //--------------------authorization--------------------
 const signIn = async(login, password) => {
@@ -80,7 +99,9 @@ const methods = {
     getProductsInCategory: getProductsInCategory,
     signIn : signIn,
     signUp : signUp,
-    searchProducts: searchProducts
+    searchProducts: searchProducts,
+    getCategories: getCategories,
+    addProduct: addProduct
 }
 
 export default methods;

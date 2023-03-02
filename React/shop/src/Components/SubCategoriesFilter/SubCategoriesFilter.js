@@ -12,7 +12,7 @@ const SubCategoriesFilter = () => {
     }, []);
 
     return (
-        <div>
+        <div style={{paddingLeft:35}}>
             <h5>Filters:</h5>
             {subCategories.map((x, idx) =>{
                 return <Form.Check key={idx} id={`subCategory=${x.id}`} type='checkbox' className="subcategory-input" label={x.name}></Form.Check>

@@ -35,10 +35,19 @@ export const searchProducts = createAsyncThunk(
     }
 );
 
+export const addProduct = createAsyncThunk(
+    'products/addProduct',
+     async(state) => {
+        const res = await api.addProduct(state);
+        return res;
+     }
+);
+
 export const productsSlice = createSlice({
     name: 'products',
     initialState: {
         values : [],
+        result: {},
         status: 'idle'
     },
     extraReducers:(builder) => {
@@ -66,11 +75,18 @@ export const productsSlice = createSlice({
                 state.values = [];
                 state.status = 'idle';
                 state.values = action.payload;
+            }).addCase(addProduct.pending, (state) => {
+                state.status = 'loading';
+            }).addCase(addProduct.fulfilled, (state, action) => {
+                state.status = 'idle';
+                return state;
             });
     }
 });
 
 
 export const selectValues = (state) => state.products.values;
+
+export const selectResult = (state) => state.products.result;
 
 export default productsSlice.reducer

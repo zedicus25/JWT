@@ -3,7 +3,7 @@ import PopularProducts from '../PopularProducts/PopularProducts';
 
 const MainPage = () => {
   return(
-    <div>
+    <div className='main-padding'>
       <NavigationBar ></NavigationBar>
       <PopularProducts></PopularProducts>   
   </div>

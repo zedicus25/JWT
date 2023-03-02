@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import {  useNavigate } from "react-router-dom";
 import token from '../../jwtToken';
+import ManagerNavBar from "../ManagerNavBar/ManagerNavBar";
+import './MainManagerPage.css';
 
 const MainManagerPage = () => {
   const navigate = useNavigate();
@@ -11,7 +13,9 @@ const MainManagerPage = () => {
       navigate('/');
   });
     return(
-      <div>Manager Page</div>
+      <div className="flexbox-row">
+        <ManagerNavBar></ManagerNavBar>
+      </div>
     );
   }
   export default MainManagerPage;

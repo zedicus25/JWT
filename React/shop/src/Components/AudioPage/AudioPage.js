@@ -17,7 +17,7 @@ import { getProductsInCategory, selectValues } from '../../app/productsSlice';
     }, []);
 
     return(
-      <div>
+      <div className='main-padding'>
       <NavigationBar ></NavigationBar>
       <div className='main-grid'>
         <div className='products-grid'>
