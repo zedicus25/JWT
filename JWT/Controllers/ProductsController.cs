@@ -18,7 +18,7 @@ public class ProductsController : ControllerBase
     public ProductsController(IUnitOfWorks unitOfWorks, ICacheService cacheService)
     {
         _unitOfWorks = unitOfWorks;
-        _cacheService = cacheService;
+        //_cacheService = cacheService;
         _azureClient = new AzureClient();
     }
 
@@ -38,78 +38,125 @@ public class ProductsController : ControllerBase
                     assets = assestSql.ToList();
                 }
             }
-            return assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList();
+            return assets.Where(x => x.StatusId != 3).ToList();
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
         }
-        return _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList();
+        return _unitOfWorks.ProductRepository.GetAll().Result.Where(x => x.StatusId != 3).ToList();
     }
 
     [HttpGet]
     [Route("productsInPage")]
-    public async Task<ActionResult<IEnumerable<Product>>> Get([FromQuery(Name ="perPage")] int perPage, [FromQuery(Name = "page")] int page)
+    public async Task<ActionResult<IEnumerable<Product>>> Get([FromQuery(Name = "perPage")] int perPage, [FromQuery(Name = "page")] int page)
     {
-        List<Product> assets = _cacheService.GetData<List<Product>>("AllAssets");
-        if(assets == null)
-            assets = _unitOfWorks.ProductRepository.GetAll().Result.ToList();
-        if (assets != null)
+        try
         {
-            int startIndex = perPage * (page - 1);
+            List<Product> assets = _cacheService.GetData<List<Product>>("AllAssets");
+            if (assets != null)
+            {
+                int startIndex = perPage * (page - 1);
+                try
+                {
+                    var res = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex, perPage);
+                    return res;
+                }
+                catch (ArgumentException ex)
+                {
+                    Product start = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ElementAtOrDefault(startIndex);
+                    if (start == null)
+                        return new List<Product>();
+                    int endIndex = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().LastIndexOf(assets.Last()) + 1;
+                    return assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex, endIndex - startIndex);
+                }
+            }
+        }
+        catch (Exception)
+        {
+        }
+
+        List<Product> assets1 = _unitOfWorks.ProductRepository.GetAll().Result.ToList();
+       
+            int startIndex1 = perPage * (page - 1);
             try
             {
-                var res = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex, perPage);
+                var res = assets1.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex1, perPage);
                 return res;
             }
             catch (ArgumentException ex)
             {
-                Product start = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ElementAtOrDefault(startIndex);
+                Product start = assets1.Where(x => x.StatusId != 3 && x.StatusId != 2).ElementAtOrDefault(startIndex1);
                 if (start == null)
                     return new List<Product>();
-                int endIndex = assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().LastIndexOf(assets.Last()) + 1;
-                return assets.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex, endIndex - startIndex);
+                int endIndex = assets1.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().LastIndexOf(assets1.Last()) + 1;
+                return assets1.Where(x => x.StatusId != 3 && x.StatusId != 2).ToList().GetRange(startIndex1, endIndex - startIndex1);
             }
-        }
-        else
-            return NoContent();
     }
 
     [HttpGet]
     [Route("getProductsInCategory")]
     public async Task<ActionResult<IEnumerable<Product>>> GetByCategoryId([FromQuery(Name = "categoryId")] int categoryId)
     {
-        List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
-        if (smartphones != null)
+        try
         {
-            var smart = smartphones.Where(x => x.CategoryId == categoryId && x.StatusId != 3 && x.StatusId != 2);
-            return smart.ToList();
+            List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
+            if (smartphones != null)
+            {
+                var smart = smartphones.Where(x => x.CategoryId == categoryId && x.StatusId != 3 && x.StatusId != 2);
+                return smart.ToList();
+            }
         }
+        catch (Exception)
+        {
+        }
+      
         var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-        if (smart1.Count() > 0)
-            _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+        try
+        {
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+        }
+        catch (Exception)
+        {
+            throw;
+        }
         return _unitOfWorks.ProductRepository.GetByCategoryId(categoryId).Result;
     }
 
-        
+
 
     [HttpGet]
     [Route("getProductsInSubCategories")]
-    public  ActionResult<IEnumerable<Product>> GetBySubCategories([FromQuery(Name = "categoriesId")] int[] categoriesId, 
+    public ActionResult<IEnumerable<Product>> GetBySubCategories([FromQuery(Name = "categoriesId")] int[] categoriesId,
         [FromQuery(Name = "categoryId")] int categoryId)
     {
-        List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
-        if (smartphones != null)
+        try
         {
-            var smart = smartphones.Where(x => categoriesId.Any(c => c == x.SubCategoryId) &&
-            x.CategoryId == categoryId);
-            return smart.ToList();
+            List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
+            if (smartphones != null)
+            {
+                var smart = smartphones.Where(x => categoriesId.Any(c => c == x.SubCategoryId) &&
+                x.CategoryId == categoryId);
+                return smart.ToList();
+            }
+        }
+        catch (Exception)
+        {
+
+            throw;
         }
         var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-        if (smart1.Count() > 0)
-            _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+        try
+        {
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+        }
+        catch (Exception)
+        {
+        }  
         return _unitOfWorks.ProductRepository.GetProductInSubCategories(categoriesId, categoryId).ToList();
     }
-       
+
 
     [HttpPost]
     [Authorize(Roles = UserRoles.Manager)]
@@ -120,8 +167,14 @@ public class ProductsController : ControllerBase
         if (_unitOfWorks.Commit() > 0)
         {
             var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-            if (smart1.Count() > 0)
-                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            try
+            {
+                if (smart1.Count() > 0)
+                    _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            }
+            catch (Exception)
+            {
+            }   
             return Ok();
         }
         return NotFound();
@@ -136,8 +189,14 @@ public class ProductsController : ControllerBase
         if (_unitOfWorks.Commit() > 0)
         {
             var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-            if (smart1.Count() > 0)
-                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            try
+            {
+                if (smart1.Count() > 0)
+                    _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            }
+            catch (Exception)
+            {
+            }        
             return Ok("Ok");
         }
 
@@ -148,36 +207,49 @@ public class ProductsController : ControllerBase
     [Route("getProduct")]
     public ActionResult<Product> GetProduct([FromQuery(Name = "productId")] int productId)
     {
-        List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
-        if (smartphones != null)
+        try
         {
-            var smart = smartphones.FirstOrDefault(x => x.Id == productId);
-            if (smart != null)
-                return smart;
+            List<Product> smartphones = _cacheService.GetData<List<Product>>("AllAssets");
+            if (smartphones != null)
+            {
+                var smart = smartphones.FirstOrDefault(x => x.Id == productId);
+                if (smart != null)
+                    return smart;
+            }
+            var smart1 = _unitOfWorks.ProductRepository.GetProductById(productId);
+            if (smart1 != null)
+                return smart1;
         }
-        var smart1 = _unitOfWorks.ProductRepository.GetProductById(productId);
-        if (smart1 != null)
-            return smart1;
-        return NotFound();
+        catch (Exception)
+        {
+        }
+        var smart2 = _unitOfWorks.ProductRepository.GetProductById(productId);
+        return smart2;
     }
 
     [HttpGet]
     [Route("getProductCount")]
     public ActionResult<int> GetProductsCount()
     {
-        List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
-        if(allAssets != null)
+        try
         {
-            return allAssets.Count;
+            List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
+            if (allAssets != null)
+            {
+                return allAssets.Count;
+            }
+            var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
+            if (smart1.Count() > 0)
+            {
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+                return smart1.Count();
+            }
         }
-        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-        if (smart1.Count() > 0)
+        catch (Exception)
         {
-            _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
-            return smart1.Count();
         }
-            
-        return NotFound();
+        var smart2 = _unitOfWorks.ProductRepository.GetAll().Result;
+        return smart2.Count();
     }
 
     [HttpPost]
@@ -191,74 +263,107 @@ public class ProductsController : ControllerBase
             string url = _azureClient.GetFileUrl(responce.FileName);
             if (!url.Equals(string.Empty))
             {
-                
+
                 var pro = Request.Form["product"];
                 Product product = JsonConvert.DeserializeObject<Product>(pro);
                 product.Photo = url;
                 _unitOfWorks.ProductRepository.Add(product);
             }
         }
-        
+
         if (_unitOfWorks.Commit() > 0)
         {
             var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-            if (smart1.Count() > 0)
-                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            try
+            {
+                if (smart1.Count() > 0)
+                    _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            }
+            catch (Exception)
+            { 
+            }
             return Ok();
         }
+
         return BadRequest();
+
     }
     [HttpPut]
     [Authorize(Roles = UserRoles.Manager)]
     [Route("updateProduct")]
-    public IActionResult UpdateProduct([FromBody]Product smartphone)
+    public IActionResult UpdateProduct([FromBody] Product smartphone)
     {
         _unitOfWorks.ProductRepository.Update(smartphone);
         if (_unitOfWorks.Commit() > 0)
         {
-            var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-            if (smart1.Count() > 0)
-                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            try
+            {
+                var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
+                if (smart1.Count() > 0)
+                    _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
             return Ok();
         }
-            
+
         return BadRequest();
     }
 
     [HttpGet]
     [Route("findProduct")]
-    public async Task<ActionResult<IEnumerable<Product>>> FindProducts([FromQuery(Name = "productName")]string productName)
+    public async Task<ActionResult<IEnumerable<Product>>> FindProducts([FromQuery(Name = "productName")] string productName)
     {
-        List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
-        if (allAssets != null)
+        try
         {
-            var smart = allAssets
-                .Where(x => x.StatusId != 3 && x.StatusId != 2 && x.Name.ToLower().Contains(productName.ToLower()))
-                .ToList();
-            if (smart != null)
-                return smart;
+            List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
+            if (allAssets != null)
+            {
+                var smart = allAssets
+                    .Where(x => x.StatusId != 3 && x.StatusId != 2 && x.Name.ToLower().Contains(productName.ToLower()))
+                    .ToList();
+                if (smart != null)
+                    return smart;
+            }
+            var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            return smart1.Where(x => x.StatusId != 3 && x.StatusId != 2 && x.Name.ToLower().Contains(productName.ToLower())).ToList();
         }
-        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-        if (smart1.Count() > 0)
-            _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
-        return smart1.Where(x => x.StatusId != 3 && x.StatusId != 2 && x.Name.ToLower().Contains(productName.ToLower())).ToList();
+        catch (Exception)
+        {
+        }
+        var smart2 = _unitOfWorks.ProductRepository.GetAll().Result;
+        return smart2.Where(x => x.StatusId != 3 && x.StatusId != 2 && x.Name.ToLower().Contains(productName.ToLower())).ToList();
 
-     }
+    }
 
     [HttpGet]
     [Route("getPopularProducts")]
     public async Task<ActionResult<IEnumerable<Product>>> GetPopular()
     {
-        List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
-        if (allAssets != null)
+        try
         {
-            var smart = allAssets.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
-            if (smart != null)
-                return smart;
+            List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
+            if (allAssets != null)
+            {
+                var smart = allAssets.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
+                if (smart != null)
+                    return smart;
+            }
+            var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            return smart1.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
         }
-        var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
-        if (smart1.Count() > 0)
-            _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
-        return smart1.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
+        catch (Exception)
+        {
+        }
+        var smart2 = _unitOfWorks.ProductRepository.GetAll().Result;
+        return smart2.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
     }
 }
