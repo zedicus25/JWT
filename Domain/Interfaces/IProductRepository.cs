@@ -11,5 +11,9 @@ namespace Domain.Interfaces
 
         Product GetProductById(int smartphoneId);
         IEnumerable<Product> GetProductInSubCategories(int[] categotiesId, int categoryId);
+
+        void UpdateCategoryId(int productId, int categoryId);
+
+        void UpdateSubCategoryId(int productId, int subCategoryId);
     }
 }

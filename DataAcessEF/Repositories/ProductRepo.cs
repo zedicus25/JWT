@@ -35,5 +35,25 @@ namespace DataAcessEF.Repositories
                 _dbContext.Entry(smartphone).State = EntityState.Modified;
             }
         }
+
+        public void UpdateCategoryId(int productId, int categoryId)
+        {
+            var smartphone = _dbContext.Products.FirstOrDefault(x => x.Id == productId);
+            if (smartphone != null)
+            {
+                smartphone.CategoryId = categoryId;
+                _dbContext.Entry(smartphone).State = EntityState.Modified;
+            }
+        }
+
+        public void UpdateSubCategoryId(int productId, int subCategoryId)
+        {
+            var smartphone = _dbContext.Products.FirstOrDefault(x => x.Id == productId);
+            if (smartphone != null)
+            {
+                smartphone.SubCategoryId = subCategoryId;
+                _dbContext.Entry(smartphone).State = EntityState.Modified;
+            }
+        }
     }
 }

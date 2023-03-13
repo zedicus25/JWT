@@ -4,6 +4,7 @@
     {
         public ICategoryRepository CategoryRepository { get; }
         public IProductRepository ProductRepository { get; }
+        public ISubCategoryRepository SubCategoryRepository { get; }
 
         int Commit();
     }
