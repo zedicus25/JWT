@@ -15,7 +15,7 @@ namespace JWT.Controllers
         public SubCategoryController(IUnitOfWorks unitOfWorks, ICacheService cacheService)
         {
             _unitOfWorks = unitOfWorks;
-           //_cacheService = cacheService;
+            //_cacheService = cacheService;
         }
 
         [HttpGet]
@@ -95,29 +95,26 @@ namespace JWT.Controllers
                 _unitOfWorks.ProductRepository.UpdateSubCategoryId(prod.Id, defaultCategory.Id);
                 _unitOfWorks.ProductRepository.SetStatus(prod.Id, 3);
             }
+            _unitOfWorks.SubCategoryRepository.Delete(subCategoryId);
             if (_unitOfWorks.Commit() > 0)
             {
-                _unitOfWorks.SubCategoryRepository.Delete(subCategoryId);
-                if (_unitOfWorks.Commit() > 0)
+                try
                 {
-                    try
+                    subCategories = await _unitOfWorks.SubCategoryRepository.GetAll();
+                    var products = await _unitOfWorks.ProductRepository.GetAll();
+                    if (subCategories.Count() > 0)
                     {
-                        subCategories = await _unitOfWorks.SubCategoryRepository.GetAll();
-                        var products = await _unitOfWorks.ProductRepository.GetAll();
-                        if (subCategories.Count() > 0)
-                        {
-                            _cacheService.SetData("SubCategory", subCategories, DateTimeOffset.Now.AddDays(1));
-                        }
-                        if (products.Count() > 0)
-                        {
-                            _cacheService.SetData("AllAssets", products, DateTimeOffset.Now.AddDays(1));
-                        }
+                        _cacheService.SetData("SubCategory", subCategories, DateTimeOffset.Now.AddDays(1));
                     }
-                    catch (Exception)
+                    if (products.Count() > 0)
                     {
+                        _cacheService.SetData("AllAssets", products, DateTimeOffset.Now.AddDays(1));
                     }
-                    return Ok();
                 }
+                catch (Exception)
+                {
+                }
+                return Ok();
             }
             return BadRequest();
         }
@@ -130,10 +127,17 @@ namespace JWT.Controllers
             if (_unitOfWorks.Commit() > 0)
             {
                 var categories = await _unitOfWorks.SubCategoryRepository.GetAll();
-                if (categories.Count() > 0)
+                try
                 {
-                    _cacheService.SetData("SubCategory", categories, DateTimeOffset.Now.AddDays(1));
+                    if (categories.Count() > 0)
+                    {
+                        _cacheService.SetData("SubCategory", categories, DateTimeOffset.Now.AddDays(1));
+                    }
                 }
+                catch (Exception)
+                {
+                }
+
                 return Ok();
             }
             return BadRequest();

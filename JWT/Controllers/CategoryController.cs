@@ -95,8 +95,6 @@ public class CategoryController : ControllerBase
             _unitOfWorks.ProductRepository.UpdateCategoryId(prod.Id, defaultCategory.Id);
             _unitOfWorks.ProductRepository.SetStatus(prod.Id, 3);
         }
-        if(_unitOfWorks.Commit() > 0)
-        {
             _unitOfWorks.CategoryRepository.Delete(categoryId);
             if (_unitOfWorks.Commit() > 0)
             {
@@ -118,7 +116,6 @@ public class CategoryController : ControllerBase
                 }
                 return Ok();
             }
-        }
         return BadRequest();
     }
 
@@ -130,9 +127,16 @@ public class CategoryController : ControllerBase
         if(_unitOfWorks.Commit() > 0)
         {
             var categories = await _unitOfWorks.CategoryRepository.GetAll();
-            if (categories.Count() > 0)
+            try
             {
-                _cacheService.SetData("Category", categories, DateTimeOffset.Now.AddDays(1));
+                if (categories.Count() > 0)
+                {
+                    _cacheService.SetData("Category", categories, DateTimeOffset.Now.AddDays(1));
+                }
+            }
+            catch(Exception)
+            {
+
             }
             return Ok();
         }
