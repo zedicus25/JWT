@@ -8,13 +8,7 @@ public class CacheService : ICacheService
     IDatabase _db;
     public CacheService()
     {
-        try
-        {
-            _db = ConnectionHelper.Connection.GetDatabase();
-        }
-        catch(Exception ex)
-        {
-        }
+        //_db = ConnectionHelper.Connection.GetDatabase();
     }
     public T GetData<T>(string key)
     {

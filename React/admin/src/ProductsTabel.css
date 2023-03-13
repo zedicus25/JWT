@@ -1,0 +1,10 @@
+ thead tr td{
+    padding: 15px;
+    background-color: rgb(223, 218, 218);
+}
+table, tr, td{
+  align-items: center;
+  text-align: center;
+    border: 1px solid black;
+  border-collapse: collapse;
+}

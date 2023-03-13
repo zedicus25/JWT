@@ -3,6 +3,8 @@ using Domain.Models;
 using JWT.Cache;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Numerics;
+using System.Security.Cryptography.Xml;
 
 namespace JWT.Controllers;
 [ApiController]
@@ -68,9 +70,29 @@ public class CategoryController : ControllerBase
         return _unitOfWorks.CategoryRepository.GetSubCategories().Result.ToList();
     }
 
+    /*[HttpPost]
+    [Route("addCategory")]
+    public async Task<IActionResult> AddCategory([FromQuery] string categoryName)
+    {
+        try
+        {
+            var categoriesSql = await _unitOfWorks.CategoryRepository.GetAll();
+            if (categoriesSql.Any(x => x.Name == categoryName))
+                return Conflict();
+
+           
+            return Ok();
+        }
+        catch (Exception)
+        {
+        }
+    }*/
+
     [HttpGet]
     [Route("productsCountInCategory")]
     public async Task<ActionResult<int>> GetCountInCategory([FromQuery(Name = "categoryId")] int categoryId) =>  
         await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
 
+
+    
 }
