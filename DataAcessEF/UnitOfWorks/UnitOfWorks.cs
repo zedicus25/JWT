@@ -14,6 +14,10 @@ namespace DataAcessEF.UnitOfWorks
 
         public ISubCategoryRepository SubCategoryRepository { get; }
 
+        public IOrderRepository OrderRepository { get; }
+
+        public IOrderLinesRepository OrderLinesRepository { get; }
+
         private readonly AssetStoreDbContext _dbContext;
 
         public UnitOfWorks(AssetStoreDbContext context)
@@ -22,6 +26,8 @@ namespace DataAcessEF.UnitOfWorks
             CategoryRepository = new CategoryRepo(_dbContext);
             ProductRepository = new ProductRepo(_dbContext);
             SubCategoryRepository = new SubCategoryRepo(_dbContext);
+            OrderRepository = new OrderRepo(_dbContext);
+            OrderLinesRepository = new OrderLinesRepo(_dbContext);
         }
 
         public int Commit() => _dbContext.SaveChanges();
