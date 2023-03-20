@@ -118,7 +118,6 @@ public class ProductsController : ControllerBase
         }
         catch (Exception)
         {
-            throw;
         }
         return _unitOfWorks.ProductRepository.GetByCategoryId(categoryId).Result;
     }
