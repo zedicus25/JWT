@@ -92,6 +92,30 @@ namespace JWT.Controllers
             return BadRequest();
         }
 
+        [HttpGet]
+        [Authorize(Roles = UserRoles.User)]
+        [Route("userOrders")]
+        public async Task<ActionResult<IEnumerable<Order>>> GetByUserId([FromQuery(Name = "userId")]string userId)
+        {
+            try
+            {
+                List<Order> orders = _cacheService.GetData<List<Order>>("AllOrders");
+                if (orders == null)
+                {
+                    var ordersSql = _unitOfWorks.OrderRepository.GetAll().Result.ToList();
+                    if (ordersSql.Count() > 0)
+                    {
+                        _cacheService.SetData("AllOrders", ordersSql, DateTimeOffset.Now.AddDays(1));
+                        orders = ordersSql.ToList();
+                    }
+                }
+                return orders.Where(or => or.UserId.Equals(userId)).ToList();
+            }
+            catch (Exception ex)
+            {
+            }
+            return _unitOfWorks.OrderRepository.GetAll().Result.Where(or => or.UserId.Equals(userId)).ToList();
+        }
         private void CreateOrdersLines(int[] productsId)
         {
             Order dbOrder = _unitOfWorks.OrderRepository.GetAll().Result.LastOrDefault();

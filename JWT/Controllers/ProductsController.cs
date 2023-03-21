@@ -365,4 +365,32 @@ public class ProductsController : ControllerBase
         var smart2 = _unitOfWorks.ProductRepository.GetAll().Result;
         return smart2.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
     }
+
+    [HttpGet]
+    [Authorize(Roles = UserRoles.User)]
+    [Route("orderProducts")]
+    public async Task<ActionResult<IEnumerable<Product>>> GetOrderLines([FromQuery(Name = "orderId")] int orderId)
+    {
+        List<Product> res = new List<Product>();
+        var orderLines = _unitOfWorks.OrderLinesRepository.GetAll().Result.Where(x => x.OrderId == orderId);
+        try
+        {
+            List<Product> allAssets = _cacheService.GetData<List<Product>>("AllAssets");
+            if (allAssets != null)
+            {
+                res = allAssets.Where(x => orderLines.Any(p => p.ProductId == x.Id)).ToList();
+                return res;
+            }
+            var smart1 = _unitOfWorks.ProductRepository.GetAll().Result;
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+            return smart1.Where(x => x.StatusId == 4 && x.StatusId != 3 && x.StatusId != 2).ToList();
+        }
+        catch (Exception)
+        {
+        }
+        var smart2 = _unitOfWorks.ProductRepository.GetAll().Result;
+        return smart2.Where(x => orderLines.Any(p => p.ProductId == x.Id)).ToList(); ;
+    }
+
 }
