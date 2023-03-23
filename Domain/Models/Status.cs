@@ -1,10 +1,13 @@
-﻿
-namespace Domain.Models
-{
-    public class Status
-    {
-        public int Id { get; set; }
+﻿using System;
+using System.Collections.Generic;
 
-        public string Name { get; set; } = null!;
-    }
+namespace Domain.Models;
+
+public partial class Status
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public virtual ICollection<Product> Products { get; } = new List<Product>();
 }
