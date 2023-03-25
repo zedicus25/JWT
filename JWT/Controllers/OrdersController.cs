@@ -29,64 +29,33 @@ namespace JWT.Controllers
         [Route("ordersList")]
         public async Task<ActionResult<IEnumerable<Order>>> Get()
         {
-            try
-            {
-                List<Order> orders = _cacheService.GetData<List<Order>>("AllOrders");
-                if (orders == null)
-                {
-                    var ordersSql = _unitOfWorks.OrderRepository.GetAll().Result.ToList();
-                    if (ordersSql.Count() > 0)
-                    {
-                        _cacheService.SetData("AllOrders", ordersSql, DateTimeOffset.Now.AddDays(1));
-                        orders = ordersSql.ToList();
-                    }
-                }
-                return orders.ToList();
-            }
-            catch (Exception ex)
-            {
-            }
-            return _unitOfWorks.OrderRepository.GetAll().Result.ToList();
+            var data = await TryGetDataFromCache();
+            return data.ToList();
         }
-
 
         [HttpPost]
         [Authorize(Roles = UserRoles.User)]
         [Route("createOrder")]
         public async Task<ActionResult<IEnumerable<Order>>> CreateOrder([FromQuery(Name = "productsId")] int[] productsId, [FromQuery(Name = "userName")] string userName, [FromQuery(Name = "totalPrice")] float totalPrice)
         {
-            Order order = new Order();
-            order.OrderTime = DateTime.Now;
-            order.ProductsCount = productsId.Length;
-            order.TotalPrice = totalPrice;
             var user = await _userManager.FindByNameAsync(userName);
 
             if (user == null)
                 return BadRequest("User dont found!");
 
-            order.UserId = user.Id;
-
-            _unitOfWorks.OrderRepository.Add(order);
+            _unitOfWorks.OrderRepository.Add(new Order { OrderTime = DateTime.Now, 
+                ProductsCount = productsId.Length, 
+                TotalPrice = totalPrice, 
+                UserId = user.Id});
 
             if (_unitOfWorks.Commit() > 0)
             {
-                var orders = _unitOfWorks.OrderRepository.GetAll().Result;
-                try
-                {
-                    if (orders.Count() > 0)
-                        _cacheService.SetData("AllOrders", orders, DateTimeOffset.Now.AddDays(1));
-                }
-                catch (Exception)
-                {
-                }
+                await SetDataToCache();
                 CreateOrdersLines(productsId);
                 if(_unitOfWorks.Commit() > 0)
-                {
                     return Ok();
-                }
 
                 return BadRequest("Something went wrong!");
-                
             }
 
             return BadRequest();
@@ -97,24 +66,8 @@ namespace JWT.Controllers
         [Route("userOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetByUserId([FromQuery(Name = "userId")]string userId)
         {
-            try
-            {
-                List<Order> orders = _cacheService.GetData<List<Order>>("AllOrders");
-                if (orders == null)
-                {
-                    var ordersSql = _unitOfWorks.OrderRepository.GetAll().Result.ToList();
-                    if (ordersSql.Count() > 0)
-                    {
-                        _cacheService.SetData("AllOrders", ordersSql, DateTimeOffset.Now.AddDays(1));
-                        orders = ordersSql.ToList();
-                    }
-                }
-                return orders.Where(or => or.UserId.Equals(userId)).ToList();
-            }
-            catch (Exception ex)
-            {
-            }
-            return _unitOfWorks.OrderRepository.GetAll().Result.Where(or => or.UserId.Equals(userId)).ToList();
+            var data = await TryGetDataFromCache();
+            return data.Where(or => or.UserId.Equals(userId)).ToList();
         }
         private void CreateOrdersLines(int[] productsId)
         {
@@ -133,6 +86,40 @@ namespace JWT.Controllers
                     _unitOfWorks.OrderLinesRepository.Add(line);
                 }
             }
+        }
+
+        private async Task SetDataToCache()
+        {
+            try
+            {
+                var smart1 = await _unitOfWorks.OrderRepository.GetAll();
+                if (smart1.Count() > 0)
+                    _cacheService.SetData("AllOrders", smart1, DateTimeOffset.Now.AddDays(1));
+            }
+            catch (Exception)
+            {
+            }
+        }
+        /// <summary>
+        /// Method <c>TryGetDataFromCache</c> trying get data from cache, if its null, 
+        /// return data form database and write cache.
+        /// </summary>
+        /// <returns>Collection of products</returns>
+        private async Task<IEnumerable<Order>> TryGetDataFromCache()
+        {
+            try
+            {
+                List<Order> assets = _cacheService.GetData<List<Order>>("AllOrders");
+                if (assets != null)
+                    return assets;
+
+                await SetDataToCache();
+            }
+            catch (Exception)
+            {
+            }
+
+            return await _unitOfWorks.OrderRepository.GetAll();
         }
     }
 }

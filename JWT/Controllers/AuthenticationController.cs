@@ -6,8 +6,8 @@ using System.Text;
 using Domain.Models;
 using Domain.Interfaces.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
 using JWT.Roles;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JWT.Controllers;
 
@@ -15,14 +15,12 @@ namespace JWT.Controllers;
 [Route("api/[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IUnitOfWorks _unitOfWorks;
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly UserManager<IdentityUser> _userManager;
     private readonly IConfiguration _configuration;
 
-    public AuthenticationController(IUnitOfWorks unitOfWorks, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+    public AuthenticationController( UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
     {
-        _unitOfWorks = unitOfWorks;
         _userManager = userManager;
         _roleManager = roleManager;
         _configuration = configuration;
@@ -77,13 +75,14 @@ public class AuthenticationController : ControllerBase
 
         if (!await _roleManager.RoleExistsAsync(UserRoles.User))
             await _roleManager.CreateAsync(new IdentityRole(UserRoles.User));
-        if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
+        if (await _roleManager.RoleExistsAsync(UserRoles.User))
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
         return Ok("User added!");
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("regManager")]
     public async Task<IActionResult> RegManager([FromBody] Register model)
     {
@@ -108,13 +107,14 @@ public class AuthenticationController : ControllerBase
 
         if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
             await _userManager.AddToRoleAsync(user, UserRoles.Manager);
-        if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
+        if (await _roleManager.RoleExistsAsync(UserRoles.User))
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
         return Ok("Manager added!");
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Admin)]
     [Route("regAdmin")]
     public async Task<IActionResult> RegAdmin([FromBody] Register model)
     {
@@ -143,7 +143,7 @@ public class AuthenticationController : ControllerBase
             await _userManager.AddToRoleAsync(user, UserRoles.Admin);
         if (await _roleManager.RoleExistsAsync(UserRoles.Manager))
             await _userManager.AddToRoleAsync(user, UserRoles.Manager);
-        if (await _roleManager.RoleExistsAsync(UserRoles.Admin))
+        if (await _roleManager.RoleExistsAsync(UserRoles.User))
             await _userManager.AddToRoleAsync(user, UserRoles.User);
 
         return Ok("Admin added!");

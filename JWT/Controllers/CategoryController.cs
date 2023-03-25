@@ -1,6 +1,8 @@
 using Domain.Interfaces.UnitOfWorks;
 using Domain.Models;
 using JWT.Cache;
+using JWT.Roles;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace JWT.Controllers;
@@ -21,29 +23,12 @@ public class CategoryController : ControllerBase
     [Route("categoryList")]
     public async Task<ActionResult<IEnumerable<Category>>> Get()
     {
-        try
-        {
-            List<Category> categories = _cacheService.GetData<List<Category>>("Category");
-            if (categories == null)
-            {
-                var categoriesSql = await _unitOfWorks.CategoryRepository.GetAll();
-                if (categoriesSql.Count() > 0)
-                {
-                    _cacheService.SetData("Category", categoriesSql, DateTimeOffset.Now.AddDays(1));
-                    categories = categoriesSql.ToList();
-                }
-            }
-            return categories;
-        }
-        catch (Exception)
-        {
-        }
-        return _unitOfWorks.CategoryRepository.GetAll().Result.ToList();
-
-
+        var data = await TryGetDataFromCache();
+        return data.ToList();
     }
 
     [HttpPost]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("addCategory")]
     public async Task<IActionResult> AddCategory([FromQuery (Name = "categoryName")] string categoryName)
     {
@@ -53,22 +38,10 @@ public class CategoryController : ControllerBase
             if (categoriesSql.Any(x => x.Name == categoryName))
                 return Conflict();
 
-            Category category = new Category();
-            category.Name = categoryName;
-            _unitOfWorks.CategoryRepository.Add(category);
+            _unitOfWorks.CategoryRepository.Add(new Category { Name = categoryName});
             if (_unitOfWorks.Commit() > 0)
             {
-                try
-                {
-                    var categories = await _unitOfWorks.CategoryRepository.GetAll();
-                    if (categories.Count() > 0)
-                    {
-                        _cacheService.SetData("Category", categories, DateTimeOffset.Now.AddDays(1));
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                await SetCategoriesToCache();
 
                 return Ok();
             }
@@ -81,6 +54,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("deleteCategory")]
     public async Task<IActionResult> DeleteCategory([FromQuery(Name = "categoryId")] int categoryId)
     {
@@ -98,46 +72,23 @@ public class CategoryController : ControllerBase
             _unitOfWorks.CategoryRepository.Delete(categoryId);
             if (_unitOfWorks.Commit() > 0)
             {
-                try
-                {
-                    categories = await _unitOfWorks.CategoryRepository.GetAll();
-                    var products = await _unitOfWorks.ProductRepository.GetAll();
-                    if (categories.Count() > 0)
-                    {
-                        _cacheService.SetData("Category", categories, DateTimeOffset.Now.AddDays(1));
-                    }
-                    if(products.Count() > 0)
-                    {
-                        _cacheService.SetData("AllAssets", products, DateTimeOffset.Now.AddDays(1));
-                    }
-                }
-                catch (Exception)
-                {
-                }
+                await SetCategoriesToCache();
+                await SetProductsToCache();
+               
                 return Ok();
             }
         return BadRequest();
     }
 
     [HttpPut]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("updateCategory")]
     public async Task<IActionResult> UpdateCategory([FromBody] Category category)
     {
         _unitOfWorks.CategoryRepository.Update(category);
         if(_unitOfWorks.Commit() > 0)
         {
-            var categories = await _unitOfWorks.CategoryRepository.GetAll();
-            try
-            {
-                if (categories.Count() > 0)
-                {
-                    _cacheService.SetData("Category", categories, DateTimeOffset.Now.AddDays(1));
-                }
-            }
-            catch(Exception)
-            {
-
-            }
+            await SetCategoriesToCache();
             return Ok();
         }
         return BadRequest(); 
@@ -145,8 +96,53 @@ public class CategoryController : ControllerBase
     
 
     [HttpGet]
+    [Authorize(Roles = UserRoles.Manager)]
     [Route("productsCountInCategory")]
     public async Task<ActionResult<int>> GetCountInCategory([FromQuery(Name = "categoryId")] int categoryId) =>  
         await _unitOfWorks.CategoryRepository.GetCountInCategory(categoryId);
+
+
+    private async Task SetCategoriesToCache()
+    {
+        try
+        {
+            var smart1 = await _unitOfWorks.CategoryRepository.GetAll();
+            if (smart1.Count() > 0)
+                _cacheService.SetData("Category", smart1, DateTimeOffset.Now.AddDays(1));
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    private async Task SetProductsToCache()
+    {
+        try
+        {
+            var smart1 = await _unitOfWorks.ProductRepository.GetAll();
+            if (smart1.Count() > 0)
+                _cacheService.SetData("AllAssets", smart1, DateTimeOffset.Now.AddDays(1));
+        }
+        catch (Exception)
+        {
+        }
+    }
+
+    private async Task<IEnumerable<Category>> TryGetDataFromCache()
+    {
+        try
+        {
+            List<Category> assets = _cacheService.GetData<List<Category>>("Category");
+            if (assets != null)
+                return assets;
+
+            await SetCategoriesToCache();
+        }
+        catch (Exception)
+        {
+        }
+
+        return await _unitOfWorks.CategoryRepository.GetAll();
+    }
 
 }
