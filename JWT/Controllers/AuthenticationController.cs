@@ -4,7 +4,6 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Domain.Models;
-using Domain.Interfaces.UnitOfWorks;
 using Microsoft.AspNetCore.Identity;
 using JWT.Roles;
 using Microsoft.AspNetCore.Authorization;
