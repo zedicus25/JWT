@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage;
 
-namespace JWT
+namespace JWT.Clients.Azure
 {
-    public class AzureClient
+    public class AzureClient : IClient
     {
-        public async Task<AzureResponce> SendFile(IFormFile file)
+        public async Task<UploadingResponce> SendFile(IFormFile file)
         {
             try
             {
@@ -25,8 +25,8 @@ namespace JWT
                     blobName = Guid.NewGuid().ToString() + "_" + file.FileName;
                     CloudBlockBlob blob = container.GetBlockBlobReference(blobName);
                     string mimeType = "application/unknown";
-                    string ext = (blobName.Contains(".")) ?
-                                System.IO.Path.GetExtension(blobName).ToLower() : "." + blobName;
+                    string ext = blobName.Contains(".") ?
+                                Path.GetExtension(blobName).ToLower() : "." + blobName;
                     Microsoft.Win32.RegistryKey regKey =
                                 Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(ext);
                     if (regKey != null && regKey.GetValue("Content Type") != null)
@@ -37,11 +37,11 @@ namespace JWT
                     blob.Properties.ContentType = mimeType;
                     await blob.UploadFromStreamAsync(memoryStream);
                 }
-                return new AzureResponce { IsSuccess = true, FileName = blobName };
+                return new UploadingResponce { IsSuccess = true, FileName = blobName };
             }
             catch (Exception)
             {
-                return new AzureResponce { IsSuccess = false, FileName = "" };
+                return new UploadingResponce { IsSuccess = false, FileName = "" };
             }
         }
 
@@ -60,10 +60,10 @@ namespace JWT
                 CloudBlobDirectory dira = container.GetDirectoryReference(string.Empty);
                 var rootDirFolders = dira.ListBlobsSegmentedAsync(true, BlobListingDetails.Metadata, null, null, null, null).Result;
 
-                IListBlobItem item = 
+                IListBlobItem item =
                     rootDirFolders.Results.FirstOrDefault(x => x.Uri.AbsoluteUri.EndsWith(fileId));
 
-                if(item != null)
+                if (item != null)
                 {
                     fileUrl = item.Uri.AbsoluteUri;
                 }

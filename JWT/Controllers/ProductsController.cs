@@ -7,6 +7,7 @@ using JWT.Roles;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Identity;
 using JWT.Statuses;
+using JWT.Clients;
 
 namespace JWT.Controllers;
 [ApiController]
@@ -15,14 +16,14 @@ public class ProductsController : ControllerBase
 {
     private readonly IUnitOfWorks _unitOfWorks;
     private readonly ICacheService _cacheService;
-    private readonly AzureClient _azureClient;
+    private readonly IClient _fileUploadingClient;
     private readonly UserManager<IdentityUser> _userManager;
 
-    public ProductsController(IUnitOfWorks unitOfWorks, ICacheService cacheService, UserManager<IdentityUser> userManager)
+    public ProductsController(IClient client,IUnitOfWorks unitOfWorks, ICacheService cacheService, UserManager<IdentityUser> userManager)
     {
         _unitOfWorks = unitOfWorks;
         //_cacheService = cacheService;
-        _azureClient = new AzureClient();
+        _fileUploadingClient = client;
         _userManager = userManager;
     }
 
@@ -112,15 +113,14 @@ public class ProductsController : ControllerBase
     [Route("addProduct")]
     public async Task<ActionResult<bool>> AddProduct()
     {
-        AzureResponce photoResponce = await _azureClient.SendFile(Request.Form.Files[0]);
-        AzureResponce assetFileReponce = await _azureClient.SendFile(Request.Form.Files[1]);
+        UploadingResponce photoResponce = await _fileUploadingClient.SendFile(Request.Form.Files[0]);
+        UploadingResponce assetFileReponce = await _fileUploadingClient.SendFile(Request.Form.Files[1]);
         if (photoResponce.IsSuccess && assetFileReponce.IsSuccess)
         {
-            string photoUrl = _azureClient.GetFileUrl(photoResponce.FileName);
-            string assetUrl = _azureClient.GetFileUrl(assetFileReponce.FileName);
+            string photoUrl = _fileUploadingClient.GetFileUrl(photoResponce.FileName);
+            string assetUrl = _fileUploadingClient.GetFileUrl(assetFileReponce.FileName);
             if (!photoUrl.Equals(string.Empty) && !assetUrl.Equals(string.Empty))
             {
-
                 var pro = Request.Form["product"];
                 Product product = JsonConvert.DeserializeObject<Product>(pro);
                 product.Photo = photoUrl;

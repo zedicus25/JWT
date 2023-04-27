@@ -11,6 +11,8 @@ using Domain.Interfaces.UnitOfWorks;
 using DataAcessEF.UnitOfWorks;
 using DataAcessEF.Data;
 using Microsoft.AspNetCore.Identity;
+using JWT.Clients;
+using JWT.Clients.AWS;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
@@ -47,11 +49,14 @@ builder.Services.AddSwaggerGen(options => {
 builder.Services.AddTransient(typeof(IGenericRepository<>), typeof(GenericRepo<>));
 builder.Services.AddTransient<IProductRepository, ProductRepo>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepo>();
+builder.Services.AddTransient<IOrderLinesRepository, OrderLinesRepo>();
+builder.Services.AddTransient<IOrderRepository, OrderRepo>();
+builder.Services.AddTransient<ISubCategoryRepository, SubCategoryRepo>();
 builder.Services.AddTransient<IUnitOfWorks, UnitOfWorks>();
+builder.Services.AddTransient<IClient, AwsClient>();
 builder.Services.AddDbContext<AssetStoreDbContext>(options =>
 options.UseSqlServer(
-    builder.Configuration.GetConnectionString("AzureConnection"),
-    //builder.Configuration.GetConnectionString("DefaultConnection"),
+    builder.Configuration.GetConnectionString("SmaterDb"),
     b => b.MigrationsAssembly(typeof(AssetStoreDbContext).Assembly.FullName)));
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AssetStoreDbContext>()
